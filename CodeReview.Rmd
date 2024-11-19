@@ -1,0 +1,54 @@
+## Example for Code Review
+
+```{r}
+library(fiveP)
+library(tidyverse)
+```
+
+```{r}
+
+# Reading the file 
+gene_classes <- readr::read_delim('CodeReview_data.txt', delim = '\t',  
+                                      show_col_types = FALSE)
+
+```
+
+```{r}
+
+# Getting the HGNC IDs
+AR <- gene_classes %>%
+  dplyr::filter(ndd_ar_classes == 'positive') %>%
+  dplyr::select(hgnc_id) #%>% dplyr::slice_sample(n = 5)
+```
+
+
+
+```{r}
+
+protein_coding_genes <- fetch_hgnc_gene_list()
+
+```
+
+
+
+
+```{r}
+
+AR_results <- get_fiveP(AR)
+
+
+```
+
+Querying the UniProt database... \|==================================================================================\| 100% Error in \`bind_rows()\` at fiveP/R/uniprot.R:147:3: ! Can't combine \`..1\$HGNC\` \<character\> and \`..2\$HGNC\` \<logical\>. Backtrace: 1. fiveP::get_fiveP(ARNDD) 2. fiveP::fetch_uniprot(hgnc_gene_list, input_genes) at fiveP/R/main.R:14:3 3. dplyr::bind_rows(uniprot_input_gene_symbol_results[-rows_to_separate, ], uniprot_input_gene_symbol_results_separated) at fiveP/R/uniprot.R:147:3
+
+```{r}
+print(AR_results)
+```
+
+
+Testing
+```{r}
+
+```
+
+
