@@ -1476,19 +1476,6 @@
       ],
       "Hash": "1cba04a4e9414bdefc9dcaa99649a8dc"
     },
-    "queryup": {
-      "Package": "queryup",
-      "Version": "1.0.5",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "R",
-        "httr",
-        "jsonlite",
-        "utils"
-      ],
-      "Hash": "60d663288627bb9ca55b480711c90ce6"
-    },
     "ragg": {
       "Package": "ragg",
       "Version": "1.3.3",
