@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# Install Bioconductor dependencies if not already installed
+Rscript -e "if (!requireNamespace('BiocManager', quietly=TRUE)) install.packages('BiocManager')"
+Rscript -e "if (!requireNamespace('STRINGdb', quietly=TRUE)) BiocManager::install('STRINGdb')"
+Rscript -e "if (!requireNamespace('biomaRt', quietly=TRUE)) BiocManager::install('biomaRt')"
