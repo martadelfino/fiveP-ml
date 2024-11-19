@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-# fiveP-R
-=======
 # fiveP-R
 
 ### Install devtools
@@ -14,4 +11,32 @@
 ### Load the package
 
 `library(fiveP)`
->>>>>>> e5e8fa2 (updated uniprot dependencies. wrote my own script to access and read data rather than using a package.)
+
+Example:
+
+```{r}
+
+# Reading the file 
+gene_classes <- readr::read_delim('CodeReview_data.txt', delim = '\t',  
+                                      show_col_types = FALSE)
+
+```
+
+```{r}
+
+# Getting the HGNC IDs
+AR <- gene_classes %>%
+  dplyr::filter(ndd_ar_classes == 'positive') %>%
+  dplyr::select(hgnc_id) #%>% dplyr::slice_sample(n = 5)
+```
+
+```{r}
+
+AR_results <- get_fiveP(AR)
+
+
+```
+
+```{r}
+print(AR_results)
+```
