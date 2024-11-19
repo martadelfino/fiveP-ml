@@ -1,8 +1,29 @@
 ## Example for Code Review
 
 ```{r}
-library(fiveP)
+if (!requireNamespace("tidyverse", quietly = TRUE))
+    install.packages("tidyverse")
+
+if (!requireNamespace("devtools", quietly = TRUE))
+    install.packages("devtools")
+
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+# Install STRINGdb if not already installed
+if (!requireNamespace("STRINGdb", quietly = TRUE)) {
+  BiocManager::install("STRINGdb")
+}
+
+# Install biomaRt if not already installed
+if (!requireNamespace("biomaRt", quietly = TRUE)) {
+  BiocManager::install("biomaRt")
+}
+
+devtools::install_github("martadelfino/fiveP-R")
+
 library(tidyverse)
+library(fiveP)
 ```
 
 ```{r}
