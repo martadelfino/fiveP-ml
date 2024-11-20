@@ -1,3 +1,9 @@
+---
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
 ## Example for Code Review
 
 ```{r}
@@ -39,10 +45,10 @@ gene_classes <- readr::read_delim('CodeReview_data.txt', delim = '\t',
 # Getting the HGNC IDs
 AR <- gene_classes %>%
   dplyr::filter(ndd_ar_classes == 'positive') %>%
-  dplyr::select(hgnc_id) #%>% dplyr::slice_sample(n = 5)
+  dplyr::select(hgnc_id)# %>%
+#  dplyr::filter(hgnc_id %in% c("HGNC:1020", "HGNC:10451", "HGNC:15972", 
+ #                              "HGNC:21416", "HGNC:10527"))
 ```
-
-
 
 ```{r}
 
@@ -51,18 +57,14 @@ AR_results <- get_fiveP(AR)
 
 ```
 
-Querying the UniProt database... \|==================================================================================\| 100% Error in \`bind_rows()\` at fiveP/R/uniprot.R:147:3: ! Can't combine \`..1\$HGNC\` \<character\> and \`..2\$HGNC\` \<logical\>. Backtrace: 1. fiveP::get_fiveP(ARNDD) 2. fiveP::fetch_uniprot(hgnc_gene_list, input_genes) at fiveP/R/main.R:14:3 3. dplyr::bind_rows(uniprot_input_gene_symbol_results[-rows_to_separate, ], uniprot_input_gene_symbol_results_separated) at fiveP/R/uniprot.R:147:3
-
 ```{r}
 print(AR_results)
 ```
 
-
-Checking 5 random genes
-
+### Checking 5 random genes
 
 ```{r}
-input_genes <- AR
+input_genes <- AR 
 
 hgnc_gene_list <- fetch_hgnc_gene_list()
 paralogues <- fetch_paralogues(hgnc_gene_list)
@@ -83,98 +85,27 @@ protein_families_ratio <- calculate_protein_families_ratio(protein_families, inp
 
 ```
 
+#### 1 gene from the AR input list: HGNC:1020, 4 genes not from the input list: HGNC:10451, HGNC:15972, HGNC:21416, HGNC:10527
 
+|  |  |  |  |  |
+|---------------|---------------|---------------|---------------|---------------|
+|  | Function Results | Manual Results | Function Results | Manual Results |
+| **Gene** | **Protein complex** | **Protein complex** | **Protein family** | **Protein family** |
+| HGNC:1020 | NA | 6 predicted complexes, so not included. | NA | PTHR23070 - only this one gene in the family. |
+| HGNC:10451 | 1 | 9 complexes: 4 curated, 5 predicted. CPX-369 complex is an input gene complex. | NA | PTHR11573 - family not in input genes |
+| HGNC:15972 | 0.2857143 | 7 complexes: only 2 curated. CPX-6212 is in two input genes. CPX-6213 is in one input gene. | 1 | PTHR23323 - 2 genes in this family, and  HGNC:14583 is an input gene. |
+| HGNC:21416 | NA | 9 complexes - all predicted. | 0.5 | PTHR10340 |
+| HGNC:10527 | NA | 4 complexes - all predicted. | NA | PTHR23233 |
 
-
-
-1 gene from the AR input list: HGNC:1020
-
-HGNC:1020
-results:
-protein_complex_score: NA
-protein_family_score: NA
-pathway_score: 0.13414634 
-paralogue_score: NA 
-ppi_score: 0.25000000
-     
-manual search: 
-protein complex: 6 complexes
-protein family: PTHR23070
-pathway: R-HSA-1267994, R-HSA-1267980, R-HSA-9866291
-paralogue: NA
-ppi: 11 nodes
-
-
-Use a function to get the raw data for the AR input genes, then see if these match. 
-
- 
-
-
-4 genes not from the input list: HGNC:10451, HGNC:15972, HGNC:21416, HGNC:10527
-
-HGNC:10451
-results:
-protein_complex_score: 1
-protein_family_score: NA
-pathway_score: 0.07692308 
-paralogue_score: NA 
-ppi_score: 0.0483871
-
-manual search: 
-protein complex: 9 complexes
-protein family: PTHR11573
-pathway: R-HSA-73638
-paralogue: NA
-ppi: 11 nodes
-
-
-HGNC:15972
-results:
-protein_complex_score: 0.2857143
-protein_family_score: 1
-pathway_score: 0.2
-paralogue_score: NA
-ppi_score: 0.07407407
-
-manual search: 
-protein complex: 11 complexes
-protein family: PTHR23323
-pathway: R-HSA-2197799
-paralogue: NA
-ppi: 11 nodes
-
-
-HGNC:21416
-results:
-protein_complex_score: NA
-protein_family_score: 0.5
-pathway_score: NA
-paralogue_score: 0
-ppi_score: NA
-
-manual search: 
-protein complex: 9 complexes
-protein family: PTHR10340
-pathway: NA
-paralogue: NA
-ppi: 11 nodes
-
-
-HGNC:10527
-results:
-protein_complex_score: NA
-protein_family_score: NA
-pathway_score: NA
-paralogue_score: 0
-ppi_score: NA
-
-manual search: 
-protein complex: 3 complexes 
-protein family: PTHR23233
-pathway: NA
-paralogue: 
-ppi: 11 nodes
-
+|  |  |  |  |  |  |
+|------------|------------|------------|------------|------------|------------|
+| Function Results | Manual Results | Function Results | Manual Results | Function Results | Manual Results |
+| Pathway | Pathway | Paralogue | Paralogue | PPI | PPI |
+| 0.13414634 | R-HSA-1268020 - pathway of 10 input genes | NA | NA | 0.25000000 |  |
+| 0.07692308 | R-HSA-499943 - pathway of 2 input genes | NA | NA | 0.0483871 |  |
+| 0.2 | R-HSA-2197799 | NA | NA | 0.07407407 |  |
+| NA | NA | 0 | NA | NA |  |
+| NA | NA | 0 | NA | NA |  |
 
 ```{r}
 
@@ -184,3 +115,137 @@ checks_all_Ps <- gene_check(hgnc_gene_list, uniprot, paralogues,
 
 ```
 
+```{r}
+
+test_protein_families <- function(protein_coding_genes,
+                                   uniprot_input_gene_symbol_results_cleaned) {
+
+  # Creating a df of protein families data from uniprot results ----------------
+
+  input_genes_protein_families_expanded <- uniprot_input_gene_symbol_results_cleaned %>%
+    tidyr::separate_rows(PANTHER, sep = ";") %>% distinct() %>%
+    filter(PANTHER != "") %>%
+    dplyr::select(PANTHER) %>% distinct() %>%
+    dplyr::rename(family_id = PANTHER)
+  
+  input_genes_protein_families_expanded2 <- input_genes_protein_families_expanded
+
+  # removing extra information after the ':'
+  input_genes_protein_families_expanded2$family_id <- trimws(sub(":.*", "", input_genes_protein_families_expanded2$family_id)) 
+  input_genes_protein_families_expanded2 <- input_genes_protein_families_expanded2 %>%
+    distinct()
+
+
+  # Querying Uniprot -----------------------------------------------------------
+
+  batch_size = 1
+
+  # Obtain families
+  family <- dplyr::select(input_genes_protein_families_expanded2, family_id)
+  vector_family <- family %>% dplyr::pull(family_id)   # turning object into vector
+
+  # Ensure input is a character vector
+  if (!is.character(vector_family)) {
+    stop("Input must be a character vector of gene names.")
+  }
+
+  # Split genes into batches
+  batches <- split(vector_family, ceiling(seq_along(vector_family) / batch_size))
+
+  # Initialize an empty list to store results
+  results <- list()
+
+  for (i in seq_along(batches)) {
+    # Join genes into a query string with OR logic for the current batch
+    family_query <- paste(paste0("xref:", batches[[i]]), collapse = " OR ")
+
+    # URL-encode the query string to handle special characters
+    encoded_query <- URLencode(family_query)
+
+    # Construct the curl command with the specified genes and desired fields
+    curl_command <- paste0(
+      "curl -H \"Accept: text/plain; format=tsv\" \"https://rest.uniprot.org/uniprotkb/search?query=reviewed:true+AND+(",
+      encoded_query,
+      ")+AND+organism_id:9606&fields=accession,xref_hgnc,gene_primary,xref_panther,version\""
+    )
+
+    # Execute the curl command and capture the output
+    output <- system(curl_command, intern = TRUE)
+
+    # Combine the output into a single string
+    tsv_content <- paste(output, collapse = "\n")
+
+    # Check if output contains valid content
+    if (nchar(tsv_content) == 0) {
+      warning(paste("No data returned for batch", i))
+      next
+    }
+
+    # Convert the TSV content into a data frame by reading from a string
+    batch_data <- read_tsv(I(tsv_content), col_types = cols(.default = "c"), show_col_types = FALSE)
+
+    # Append the batch data to the results list
+    results[[i]] <- batch_data
+  }
+
+  # Combine all batch results into a single data frame
+  uniprot_input_gene_family_results <- do.call(rbind, results)
+
+  # Cleaning Protein Families result file from Uniprot ---------------------------
+
+  # Selecting and renaming required columns
+  proteinfamily_genes <- uniprot_input_gene_family_results %>%
+    dplyr::select(Entry, HGNC, 'Gene Names (primary)', PANTHER) %>%
+    dplyr::rename(uniprot_ids = Entry) %>%
+    dplyr::rename(hgnc_id = HGNC) %>%
+    dplyr::rename(family_id = PANTHER) %>%
+    dplyr::rename(symbol = 'Gene Names (primary)')
+
+  # Removing trailing ;
+  proteinfamily_genes$hgnc_id <- gsub(";$", "", proteinfamily_genes$hgnc_id)
+  proteinfamily_genes$family_id <- gsub(";$", "", proteinfamily_genes$family_id)
+
+  # Separating families into new rows
+  proteinfamily_genes_expanded <- proteinfamily_genes %>%
+    tidyr::separate_rows(family_id, sep = ";") %>%
+    filter(family_id != "")
+
+  # removing extra bits
+  proteinfamily_genes_expanded$family_id <- trimws(sub(":.*", "", proteinfamily_genes_expanded$family_id))
+  proteinfamily_genes_expanded <- proteinfamily_genes_expanded %>% distinct() %>%
+    dplyr::select(family_id, uniprot_ids, hgnc_id, symbol) %>% # fixing order of columns
+    arrange(family_id) # rearranging rows
+
+
+  cat('\n(7/12) finished running protein_families.R\n')
+  return(proteinfamily_genes_expanded)
+
+}
+
+
+test_pf <- test_protein_families(hgnc_gene_list, uniprot)
+
+```
+
+```{r}
+
+encoded_query <- paste(paste0("xref:", "PTHR11777"), collapse = " OR ")
+
+
+
+
+curl_command <- paste0(
+    "curl -H \"Accept: text/plain; format=tsv\" \"https://rest.uniprot.org/uniprotkb/search?query=reviewed:true+AND+(",
+    encoded_query,
+    ")+AND+organism_id:9606&fields=accession,xref_hgnc,gene_primary,xref_panther,version\""
+  )
+
+  # Execute the curl command and capture the output
+output <- system(curl_command, intern = TRUE)
+
+  # Combine the output into a single string
+tsv_content <- paste(output, collapse = "\n")
+
+print(tsv_content)
+
+```

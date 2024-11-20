@@ -18,12 +18,12 @@ fetch_protein_families <- function(protein_coding_genes,
     dplyr::rename(family_id = PANTHER)
 
   # removing extra information after the ':'
-  input_genes_protein_families_expanded$family_id <- trimws(sub("\\:.*?", "", input_genes_protein_families_expanded$family_id))
+  input_genes_protein_families_expanded$family_id <- trimws(sub(":.*", "", input_genes_protein_families_expanded$family_id))
 
 
   # Querying Uniprot -----------------------------------------------------------
 
-  batch_size = 50
+  batch_size = 1
 
   # Obtain families
   family <- dplyr::select(input_genes_protein_families_expanded, family_id)
@@ -96,7 +96,7 @@ fetch_protein_families <- function(protein_coding_genes,
     filter(family_id != "")
 
   # removing extra bits
-  proteinfamily_genes_expanded$family_id <- trimws(sub("\\:.*", "", proteinfamily_genes_expanded$family_id))
+  proteinfamily_genes_expanded$family_id <- trimws(sub(":.*", "", proteinfamily_genes_expanded$family_id))
   proteinfamily_genes_expanded <- proteinfamily_genes_expanded %>% distinct() %>%
     dplyr::select(family_id, uniprot_ids, hgnc_id, symbol) %>% # fixing order of columns
     arrange(family_id) # rearranging rows

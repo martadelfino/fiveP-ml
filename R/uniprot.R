@@ -7,7 +7,7 @@
 #' @return A dataframe with Uniprot data of the input genes.
 #' @export
 fetch_uniprot <- function(protein_coding_genes, input_genes) {
-  batch_size = 50
+  batch_size = 1
 
   # Reading the protein coding genes file --------------------------------------
   hgnc_uniprot_symbol <- protein_coding_genes %>%
