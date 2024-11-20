@@ -62,7 +62,7 @@ fetch_uniprot <- function(protein_coding_genes, input_genes) {
 
     # Construct the curl command with the specified genes and desired fields
     curl_command <- paste0(
-      "curl -H \"Accept: text/plain; format=tsv\" \"https://rest.uniprot.org/uniprotkb/search?query=reviewed:true+AND+(",
+      "curl -s -H \"Accept: text/plain; format=tsv\" \"https://rest.uniprot.org/uniprotkb/search?query=reviewed:true+AND+(",
       encoded_query,
       ")+AND+organism_id:9606&fields=accession,id,xref_hgnc,gene_primary,xref_complexportal,xref_panther,version\""
     )
