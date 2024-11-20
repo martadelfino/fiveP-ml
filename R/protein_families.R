@@ -55,7 +55,7 @@ fetch_protein_families <- function(protein_coding_genes,
     )
 
     # Execute the curl command and capture the output
-    output <- system(curl_command, intern = TRUE)
+    output <- system(curl_command, intern = TRUE, ignore.stderr = TRUE)
 
     # Combine the output into a single string
     tsv_content <- paste(output, collapse = "\n")
