@@ -104,7 +104,7 @@ check_protein_families <- function(protein_coding_genes,
 
   # Querying Uniprot -----------------------------------------------------------
 
-  batch_size = 50
+  batch_size = 1
 
   # Obtain families
   family <- dplyr::select(input_genes_protein_families_expanded, family_id)
@@ -130,7 +130,7 @@ check_protein_families <- function(protein_coding_genes,
 
     # Construct the curl command with the specified genes and desired fields
     curl_command <- paste0(
-      "curl -H \"Accept: text/plain; format=tsv\" \"https://rest.uniprot.org/uniprotkb/search?query=reviewed:true+AND+(",
+      "curl -s -H \"Accept: text/plain; format=tsv\" \"https://rest.uniprot.org/uniprotkb/search?query=reviewed:true+AND+(",
       encoded_query,
       ")+AND+organism_id:9606&fields=accession,xref_hgnc,gene_primary,xref_panther,version\""
     )
