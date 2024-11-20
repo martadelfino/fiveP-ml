@@ -91,11 +91,11 @@ protein_families_ratio <- calculate_protein_families_ratio(protein_families, inp
 |---------------|---------------|---------------|---------------|---------------|
 |  | Function Results | Manual Results | Function Results | Manual Results |
 | **Gene** | **Protein complex** | **Protein complex** | **Protein family** | **Protein family** |
-| HGNC:1020 | NA | 6 predicted complexes, so not included. | NA | PTHR23070 - only this one gene in the family. |
+| HGNC:1020 | NA | 6 predicted complexes, so not included. | 0 | PTHR23070 - only this one gene in the family. |
 | HGNC:10451 | 1 | 9 complexes: 4 curated, 5 predicted. CPX-369 complex is an input gene complex. | NA | PTHR11573 - family not in input genes |
 | HGNC:15972 | 0.2857143 | 7 complexes: only 2 curated. CPX-6212 is in two input genes. CPX-6213 is in one input gene. | 1 | PTHR23323 - 2 genes in this family, and  HGNC:14583 is an input gene. |
-| HGNC:21416 | NA | 9 complexes - all predicted. | 0.5 | PTHR10340 |
-| HGNC:10527 | NA | 4 complexes - all predicted. | NA | PTHR23233 |
+| HGNC:21416 | NA | 9 complexes - all predicted. | 0.5 | PTHR10340 - 3 genes in the family. 1 is an input gene |
+| HGNC:10527 | NA | 4 complexes - all predicted. | NA | PTHR23233 - 4 genes in the family. None are input genes. |
 
 |  |  |  |  |  |  |
 |------------|------------|------------|------------|------------|------------|
@@ -103,9 +103,9 @@ protein_families_ratio <- calculate_protein_families_ratio(protein_families, inp
 | Pathway | Pathway | Paralogue | Paralogue | PPI | PPI |
 | 0.13414634 | R-HSA-1268020 - pathway of 10 input genes | NA | NA | 0.25000000 |  |
 | 0.07692308 | R-HSA-499943 - pathway of 2 input genes | NA | NA | 0.0483871 |  |
-| 0.2 | R-HSA-2197799 | NA | NA | 0.07407407 |  |
-| NA | NA | 0 | NA | NA |  |
-| NA | NA | 0 | NA | NA |  |
+| 0.2 | R-HSA-9705683 - this is the pathway that the function gets from reactome. 11 input genes also are in this pathway. Manually searching Reactome, the first one it shows me is it's pathway R-HSA-9754560, which is inside the previous pathway (but not a subpathway). | NA | NA | 0.07407407 |  |
+| NA | NA - no annotations | 0 | Has two paralogs. One is an input gene HGNC:11120 but below the cutoff of 30%, so it's not counted. | NA |  |
+| NA | NA - no annotations | 0 | Has 14 paralogs, but only 2 above 30% threshold: HGNC:15924, HGNC:10524 and neither are input genes. | NA |  |
 
 ```{r}
 
@@ -113,6 +113,69 @@ checks_all_Ps <- gene_check(hgnc_gene_list, uniprot, paralogues,
                                 ppi, input_genes)
 
 
+```
+
+Other code used to check
+
+```{r}
+
+unique_categories <- unique(paralogues$hsapiens_paralog_orthology_type)
+print(unique_categories)
+
+category_counts <- table(paralogues$hsapiens_paralog_orthology_type)
+print(category_counts)
+```
+
+```{r}
+
+check_protein_families_ratio <- function(panther, input_genes) {
+
+  # Input genes ----------------------------------------------------------------
+
+  input_genes <- input_genes %>%
+    dplyr::select(hgnc_id)
+
+
+  # Panther protein families of input genes ------------------------------------
+
+  panther_counts <- panther %>%
+    mutate(input_gene_yes_or_no = ifelse(hgnc_id %in% input_genes$hgnc_id, 1, 0))
+
+
+  # Calculations ---------------------------------------------------------------
+
+  # Counting number of input proteins/genes in each family
+  panther_counts <- panther_counts %>%
+    group_by(family_id) %>%
+    mutate(num_genes_in_family = n(),
+           num_input_gene_per_family = sum(input_gene_yes_or_no))
+
+  # Counting the number of unique genes in each pathway that gene is related to
+  panther_counts_per_gene <- panther_counts %>%
+    group_by(hgnc_id) %>%
+    dplyr::mutate(
+      num_families = n_distinct(family_id),
+      num_unique_genes_in_families = sum(length(unique(panther_counts$hgnc_id[panther_counts$family_id %in% family_id]))),
+      num_input_genes_in_families = sum(unique(panther_counts$hgnc_id[panther_counts$family_id %in% family_id]) %in% input_genes$hgnc_id) - (hgnc_id %in% input_genes$hgnc_id)
+    ) %>%
+    dplyr::mutate(ratio_input_genes_in_families = num_input_genes_in_families / num_unique_genes_in_families) %>%
+    dplyr::select(hgnc_id, uniprot_ids, family_id, num_families,
+                  num_unique_genes_in_families, num_input_genes_in_families,
+                  ratio_input_genes_in_families) %>% arrange(hgnc_id)
+
+  panther_counts_per_gene_final <- panther_counts_per_gene %>%
+    dplyr::select(hgnc_id, uniprot_ids, num_families,
+                  num_unique_genes_in_families, num_input_genes_in_families,
+                  ratio_input_genes_in_families) %>% unique() %>%
+    dplyr::mutate(ratio_input_genes_in_families = ifelse(is.na(ratio_input_genes_in_families), 0, ratio_input_genes_in_families))
+
+
+  cat('\n(12/12) finished running protein_families_ratio.R\n')
+  return(panther_counts_per_gene_final)
+}
+
+
+test_family_ratio <- check_protein_families_ratio(protein_families, AR)
 ```
 
 ```{r}
@@ -164,7 +227,7 @@ test_protein_families <- function(protein_coding_genes,
 
     # Construct the curl command with the specified genes and desired fields
     curl_command <- paste0(
-      "curl -H \"Accept: text/plain; format=tsv\" \"https://rest.uniprot.org/uniprotkb/search?query=reviewed:true+AND+(",
+      "curl -s -H \"Accept: text/plain; format=tsv\" \"https://rest.uniprot.org/uniprotkb/search?query=reviewed:true+AND+(",
       encoded_query,
       ")+AND+organism_id:9606&fields=accession,xref_hgnc,gene_primary,xref_panther,version\""
     )
