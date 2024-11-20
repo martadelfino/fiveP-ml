@@ -376,8 +376,9 @@ gene_check <- function(protein_coding_genes,
   dfs <- list(protein_complex, protein_families, pathways, paralogues, ppi)
 
   # Merge all data frames by 'id' using Reduce
-  merged_df <- Reduce(function(x, y) merge(x, y, by = "id"), dfs)
+  merged_df <- Reduce(function(x, y) merge(x, y, by = "hgnc_id"), dfs)
 
+  cat('\n finished running all gene checks.\n')
   return(merged_df)
 }
 
