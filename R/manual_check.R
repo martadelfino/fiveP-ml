@@ -311,10 +311,60 @@ check_paralogues <- function(paralogues, input_genes) {
 #' @export
 check_ppi <- function(ppi, input_genes) {
 
+  # PPI annotations ------------------------------------------------------------
 
+  ppi <- ppi %>%
+    dplyr::select(!protein1_string_id) %>%
+    dplyr::select(!protein2_string_id) %>%
+    dplyr::rename(hgnc_id = protein1_hgnc_id)
+
+
+  # Input genes ----------------------------------------------------------------
+
+  input_genes <- input_genes %>%
+    dplyr::select(hgnc_id)
+
+
+  # Calculations ---------------------------------------------------------------
+
+  # Counting the number of interactions per gene
+  ppi_count1 <- ppi %>%
+    group_by(hgnc_id) %>%
+    dplyr::mutate(num_of_interactions = n())
+
+  # Check if interaction protein is an input gene
+  ppi_count2 <- ppi_count1 %>%
+    mutate(is_interaction_input_gene_yes_or_no = ifelse(protein2_hgnc_id %in% input_genes$hgnc_id, 1, 0))
+
+  # Count how many interactions are input genes
+  ppi_count3 <- ppi_count2 %>%
+    group_by(hgnc_id) %>%
+    mutate(num_input_gene_interactions = sum(is_interaction_input_gene_yes_or_no))
+
+  ppi_ratio_final <- ppi_count3 %>%
+    dplyr::select(!protein2_hgnc_id) %>%
+    dplyr::distinct(hgnc_id, .keep_all = TRUE)
+
+  cat('\n(5/5) finished running check_ppi()\n')
+  return(ppi_final)
+
+
+}
+
+
+
+#' Main function for checks
+#'
+#' @param protein_coding_genes A df of protein coding genes
+#' @param uniprot_input_gene_symbol_results_cleaned description
+#' @param paralogues description
+#' @param ppi description
+#' @param input_genes A df of input genes
+#' @return A dataframe with HGNC IDs and protein features for input genes
+#' @export
 gene_check <- function(protein_coding_genes,
                        uniprot_input_gene_symbol_results_cleaned,
-                       paralogues, ppi, input_genes)
+                       paralogues, ppi, input_genes) {
 
   protein_complex <- check_protein_complex(protein_coding_genes,
                                            uniprot_input_gene_symbol_results_cleaned)
