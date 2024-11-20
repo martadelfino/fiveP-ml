@@ -341,13 +341,12 @@ check_ppi <- function(ppi, input_genes) {
     group_by(hgnc_id) %>%
     mutate(num_input_gene_interactions = sum(is_interaction_input_gene_yes_or_no))
 
-  ppi_ratio_final <- ppi_count3 %>%
+  ppi_final <- ppi_count3 %>%
     dplyr::select(!protein2_hgnc_id) %>%
     dplyr::distinct(hgnc_id, .keep_all = TRUE)
 
   cat('\n(5/5) finished running check_ppi()\n')
   return(ppi_final)
-
 
 }
 

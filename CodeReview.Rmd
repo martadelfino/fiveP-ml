@@ -178,7 +178,7 @@ ppi: 11 nodes
 
 ```{r}
 
-checks_all_Ps <- gene_check(protein_coding_genes, uniprot, paralogues, 
+checks_all_Ps <- gene_check(hgnc_gene_list, uniprot, paralogues, 
                                 ppi, input_genes)
 
 
