@@ -46,15 +46,6 @@ AR <- gene_classes %>%
 
 ```{r}
 
-protein_coding_genes <- fetch_hgnc_gene_list()
-
-```
-
-
-
-
-```{r}
-
 AR_results <- get_fiveP(AR)
 
 
@@ -67,9 +58,129 @@ print(AR_results)
 ```
 
 
-Testing
+Checking 5 random genes
+
+
 ```{r}
+input_genes <- AR
+
+hgnc_gene_list <- fetch_hgnc_gene_list()
+paralogues <- fetch_paralogues(hgnc_gene_list)
+pathways <- fetch_pathways(hgnc_gene_list, input_genes)
+ppi <- fetch_ppi(hgnc_gene_list)
+uniprot <- fetch_uniprot(hgnc_gene_list, input_genes)
+protein_complex <- fetch_protein_complex(hgnc_gene_list, uniprot)
+protein_families <- fetch_protein_families(hgnc_gene_list, uniprot)
+
+# Data processing functions --------------------------------------------------
+paralogues_ratio <- calculate_paralogues_ratio(paralogues, input_genes)
+pathways_ratio <- calculate_pathways_ratio(pathways$input_genes_Uniprot2Reactome,
+                                           pathways$Uniprot2Reactome_final_hgnc_no_na,
+                                           input_genes)
+ppi_ratio <- calculate_ppi_ratio(ppi, input_genes)
+protein_complex_ratio <- calculate_protein_complex_ratio(protein_complex, input_genes)
+protein_families_ratio <- calculate_protein_families_ratio(protein_families, input_genes)
 
 ```
 
+
+
+
+
+1 gene from the AR input list: HGNC:1020
+
+HGNC:1020
+results:
+protein_complex_score: NA
+protein_family_score: NA
+pathway_score: 0.13414634 
+paralogue_score: NA 
+ppi_score: 0.25000000
+     
+manual search: 
+protein complex: 6 complexes
+protein family: PTHR23070
+pathway: R-HSA-1267994, R-HSA-1267980, R-HSA-9866291
+paralogue: NA
+ppi: 11 nodes
+
+
+Use a function to get the raw data for the AR input genes, then see if these match. 
+
+ 
+
+
+4 genes not from the input list: HGNC:10451, HGNC:15972, HGNC:21416, HGNC:10527
+
+HGNC:10451
+results:
+protein_complex_score: 1
+protein_family_score: NA
+pathway_score: 0.07692308 
+paralogue_score: NA 
+ppi_score: 0.0483871
+
+manual search: 
+protein complex: 9 complexes
+protein family: PTHR11573
+pathway: R-HSA-73638
+paralogue: NA
+ppi: 11 nodes
+
+
+HGNC:15972
+results:
+protein_complex_score: 0.2857143
+protein_family_score: 1
+pathway_score: 0.2
+paralogue_score: NA
+ppi_score: 0.07407407
+
+manual search: 
+protein complex: 11 complexes
+protein family: PTHR23323
+pathway: R-HSA-2197799
+paralogue: NA
+ppi: 11 nodes
+
+
+HGNC:21416
+results:
+protein_complex_score: NA
+protein_family_score: 0.5
+pathway_score: NA
+paralogue_score: 0
+ppi_score: NA
+
+manual search: 
+protein complex: 9 complexes
+protein family: PTHR10340
+pathway: NA
+paralogue: NA
+ppi: 11 nodes
+
+
+HGNC:10527
+results:
+protein_complex_score: NA
+protein_family_score: NA
+pathway_score: NA
+paralogue_score: 0
+ppi_score: NA
+
+manual search: 
+protein complex: 3 complexes 
+protein family: PTHR23233
+pathway: NA
+paralogue: 
+ppi: 11 nodes
+
+
+```{r}
+
+checks_all_Ps <- gene_check(protein_coding_genes, uniprot, paralogues, 
+                                ppi, input_genes)
+
+
+```
 
