@@ -51,6 +51,8 @@ get_fiveP <- function(input_genes) { # eventually I can add options to save the 
     arrange(desc(protein_complex_score), desc(protein_family_score),
             desc(pathway_score), desc(paralogue_score), desc(ppi_score))
 
+  results <- results %>% distinct()
+
 
   cat("finished")
   return(results)

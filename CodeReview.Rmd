@@ -88,17 +88,17 @@ protein_families_ratio <- calculate_protein_families_ratio(protein_families, inp
 #### 1 gene from the AR input list: HGNC:1020, 4 genes not from the input list: HGNC:10451, HGNC:15972, HGNC:21416, HGNC:10527
 
 |  |  |  |  |  |
-|---------------|---------------|---------------|---------------|---------------|
+|----|----|----|----|----|
 |  | Function Results | Manual Results | Function Results | Manual Results |
 | **Gene** | **Protein complex** | **Protein complex** | **Protein family** | **Protein family** |
 | HGNC:1020 | NA | 6 predicted complexes, so not included. | 0 | PTHR23070 - only this one gene in the family. |
 | HGNC:10451 | 1 | 9 complexes: 4 curated, 5 predicted. CPX-369 complex is an input gene complex. | NA | PTHR11573 - family not in input genes |
-| HGNC:15972 | 0.2857143 | 7 complexes: only 2 curated. CPX-6212 is in two input genes. CPX-6213 is in one input gene. | 1 | PTHR23323 - 2 genes in this family, and  HGNC:14583 is an input gene. |
+| HGNC:15972 | 0.2857143 | 7 complexes: only 2 curated. CPX-6212 is in two input genes. CPX-6213 is in one input gene. | 1 | PTHR23323 - 2 genes in this family, and HGNC:14583 is an input gene. |
 | HGNC:21416 | NA | 9 complexes - all predicted. | 0.5 | PTHR10340 - 3 genes in the family. 1 is an input gene |
 | HGNC:10527 | NA | 4 complexes - all predicted. | NA | PTHR23233 - 4 genes in the family. None are input genes. |
 
 |  |  |  |  |  |  |
-|------------|------------|------------|------------|------------|------------|
+|----|----|----|----|----|----|
 | Function Results | Manual Results | Function Results | Manual Results | Function Results | Manual Results |
 | Pathway | Pathway | Paralogue | Paralogue | PPI | PPI |
 | 0.13414634 | R-HSA-1268020 - pathway of 10 input genes | NA | NA | 0.25000000 |  |
