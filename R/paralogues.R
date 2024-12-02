@@ -16,7 +16,7 @@ fetch_paralogues <- function(protein_coding_genes) {
 
   # Querying BioBart for gene paralogues -----------------------------------------
 
-  human <- biomaRt::useMart("ensembl", dataset = "hsapiens_gene_ensembl", host = "useast.ensembl.org")
+  human <- biomaRt::useMart("ensembl", dataset = "hsapiens_gene_ensembl")
   paralogues <- biomaRt::getBM(attributes = c("ensembl_gene_id",
                                               "hsapiens_paralog_ensembl_gene",
                                               "hsapiens_paralog_orthology_type",
