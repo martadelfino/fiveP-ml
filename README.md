@@ -1,60 +1,45 @@
-# fiveP-R
+---
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+# fiveP-ml
+
+This repo contains the scripts to obtain the '5 Ps' of a number of input
+genes: protein complex, protein family, paralogues, pathways, and
+protein-protein interactions. The output is a data frame with all
+protein coding genes and a binary score (0 or 1) describing whether each
+gene is in the same 'P' as any of the input genes.
 
 ### Install devtools
 
 `install.packages("devtools")`
 
-### Install dependencies (to do: remove this step)
+### Install dependencies
 
-```{r}
+```{r} 
 if (!requireNamespace("tidyverse", quietly = TRUE))
-    install.packages("tidyverse")
+install.packages("tidyverse")
 
 if (!requireNamespace("devtools", quietly = TRUE))
-    install.packages("devtools")
+install.packages("devtools")
 
 if (!requireNamespace("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
+install.packages("BiocManager")
 
-# Install STRINGdb if not already installed
 if (!requireNamespace("STRINGdb", quietly = TRUE)) {
-  BiocManager::install("STRINGdb")
-}
+BiocManager::install("STRINGdb") }
 
-# Install biomaRt if not already installed
 if (!requireNamespace("biomaRt", quietly = TRUE)) {
-  BiocManager::install("biomaRt")
-}
+BiocManager::install("biomaRt") }
 
-````
+```
 
 ### Install the package
 
-`devtools::install_github("martadelfino/fiveP-R")`
+`devtools::install_github("martadelfino/fiveP-ml")`
 
 ### Load the package
 
 `library(fiveP)`
-
-Example:
-
-```{r}
-# Reading the file 
-gene_classes <- readr::read_delim('CodeReview_data.txt', delim = '\t',  
-                                      show_col_types = FALSE)
-```
-
-```{r}
-# Getting the HGNC IDs
-AR <- gene_classes %>%
-  dplyr::filter(ndd_ar_classes == 'positive') %>%
-  dplyr::select(hgnc_id) #%>% dplyr::slice_sample(n = 5)
-```
-
-```{r}
-AR_results <- get_fiveP(AR)
-```
-
-```{r}
-print(AR_results)
-```

@@ -12,7 +12,8 @@ check_protein_complex <- function(protein_coding_genes,
   # Creating a new df of the complexes from uniprot results --------------------
 
   input_genes_protein_complexes_expanded <- uniprot_input_gene_symbol_results_cleaned %>%
-    tidyr::separate_rows(ComplexPortal, sep = ";") %>% distinct() %>%
+    tidyr::separate_rows(ComplexPortal, sep = ";") %>%
+    distinct() %>%
     filter(ComplexPortal != "") %>%
     dplyr::select(ComplexPortal) %>% distinct() %>%
     dplyr::rename(complex_id = ComplexPortal)

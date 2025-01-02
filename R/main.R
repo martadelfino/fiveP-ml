@@ -42,7 +42,7 @@ get_fiveP <- function(input_genes) { # eventually I can add options to save the 
   list_of_dfs <- list(protein_coding_genes, protein_complexes, protein_families,
                       pathways, paralogues, ppi)
 
-  results <- reduce(list_of_dfs, left_join, by = 'hgnc_id') %>%
+  results <- reduce(list_of_dfs, left_join, by = "hgnc_id") %>%
     dplyr::rename(protein_complex_score = ratio_input_genes_in_complexes) %>%
     dplyr::rename(protein_family_score = ratio_input_genes_in_families) %>%
     dplyr::rename(pathway_score = ratio_input_genes_in_pathways) %>%
@@ -51,11 +51,11 @@ get_fiveP <- function(input_genes) { # eventually I can add options to save the 
     arrange(desc(protein_complex_score), desc(protein_family_score),
             desc(pathway_score), desc(paralogue_score), desc(ppi_score))
 
-  results <- results %>% distinct()
-
+  results <- results %>%
+    distinct() %>%
+    # Convert any score > 0 to 1, and anything else (0 or NA) to 0
+    dplyr::mutate(across(ends_with("_score"), ~ ifelse(. > 0, 1, 0)))
 
   cat("finished")
   return(results)
 }
-
-
