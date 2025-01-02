@@ -102,8 +102,8 @@ fetch_uniprot <- function(protein_coding_genes, input_genes) {
       slice(rows_to_separate) %>%
       separate_rows(HGNC, sep = ";") %>%
       mutate(HGNC = ifelse(grepl("HGNC:", HGNC), HGNC, paste0("HGNC:", HGNC)))
-    cat('print(uniprot_input_gene_symbol_results_separated)')
-    print(uniprot_input_gene_symbol_results_separated)
+    #cat('print(uniprot_input_gene_symbol_results_separated)')
+    #print(uniprot_input_gene_symbol_results_separated)
 
     # Combine the separated rows with the rest of the dataframe
     uniprot_input_gene_symbol_results_combined <- bind_rows(uniprot_input_gene_symbol_results[-rows_to_separate, ],
