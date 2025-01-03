@@ -1,9 +1,3 @@
----
-editor_options: 
-  markdown: 
-    wrap: 72
----
-
 # fiveP-ml
 
 This repo contains the scripts to obtain the '5 Ps' of a number of input
@@ -12,11 +6,13 @@ protein-protein interactions. The output is a data frame with all
 protein coding genes and a binary score (0 or 1) describing whether each
 gene is in the same 'P' as any of the input genes.
 
-### Install devtools
+### Installation
+
+Install devtools
 
 `install.packages("devtools")`
 
-### Install dependencies
+Install dependencies
 
 ```{r} 
 if (!requireNamespace("tidyverse", quietly = TRUE))
@@ -36,10 +32,10 @@ BiocManager::install("biomaRt") }
 
 ```
 
-### Install the package
+Install package
 
 `devtools::install_github("martadelfino/fiveP-ml")`
 
-### Load the package
+Load package
 
-`library(fiveP)`
+`library(fivePml)`
