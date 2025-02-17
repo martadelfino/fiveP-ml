@@ -19,7 +19,7 @@ fetch_paralogues <- function(protein_coding_genes, chunk_size = 100) {
 
   # Connect to Ensembl Mart
   human <- biomaRt::useEnsembl(
-    biomart = "genes",
+    biomart = "ensembl",
     dataset = "hsapiens_gene_ensembl"
   )
 
