@@ -18,7 +18,8 @@ fetch_paralogues <- function(protein_coding_genes, chunk_size = 100) {
   )
 
   # Connect to Ensembl Mart
-  human <- biomaRt::useMart("ensembl", dataset = "hsapiens_gene_ensembl", host="https://www.ensembl.org")
+  human <- biomaRt::useMart(biomart="ensembl", dataset="hsapiens_gene_ensembl",
+                            host="https://www.ensembl.org")
 
   # Function to query a single chunk
   query_chunk <- function(chunk) {
