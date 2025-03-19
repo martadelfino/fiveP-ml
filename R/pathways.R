@@ -6,7 +6,7 @@
 #' @param input_genes The df of input genes.
 #' @return A list of two dataframes with pathway data from Reactome 1. input genes pathway data, 2. All protein coding genes pathway data
 #' @export
-fetch_pathways <- function(protein_coding_genes, input_genes) {
+fetch_pathways <- function(protein_coding_genes, input_genes, save_raw = FALSE, save_path = NULL) {
 
   # Reading the protein coding genes file --------------------------------------
 
@@ -36,6 +36,14 @@ fetch_pathways <- function(protein_coding_genes, input_genes) {
   # Obtaining data from Reactome directly, lowest level pathways
   Uniprot2Reactome <- read_delim('https://reactome.org/download/current/UniProt2Reactome.txt',
                                  col_names = FALSE)
+
+  # Save raw data
+  if (save_raw) {
+    if (is.null(save_path)) {
+      save_path <- "data/Uniprot2Reactome.csv"
+    }
+    readr::write_csv(Uniprot2Reactome, save_path)
+  }
 
   # Cleaning the Uniprot to Reactome file
   Uniprot2Reactome_cleaned <- Uniprot2Reactome %>%

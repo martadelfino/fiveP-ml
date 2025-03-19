@@ -7,7 +7,7 @@
 #' @return A dataframe with Protein Family data from Uniprot for the input genes.
 #' @export
 fetch_protein_families <- function(protein_coding_genes,
-                                   uniprot_input_gene_symbol_results_cleaned) {
+                                   uniprot_input_gene_symbol_results_cleaned, save_raw = FALSE, save_path = NULL) {
 
   # Creating a df of protein families data from uniprot results ----------------
 
@@ -75,6 +75,14 @@ fetch_protein_families <- function(protein_coding_genes,
 
   # Combine all batch results into a single data frame
   uniprot_input_gene_family_results <- do.call(rbind, results)
+
+  # Save raw data
+  if (save_raw) {
+    if (is.null(save_path)) {
+      save_path <- "data/uniprot_input_gene_family_results.csv"
+    }
+    readr::write_csv(uniprot_input_gene_family_results, save_path)
+  }
 
   # Cleaning Protein Families result file from Uniprot ---------------------------
 

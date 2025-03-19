@@ -6,7 +6,7 @@
 #' @param input_genes The df of input genes.
 #' @return A dataframe with Uniprot data of the input genes.
 #' @export
-fetch_uniprot <- function(protein_coding_genes, input_genes) {
+fetch_uniprot <- function(protein_coding_genes, input_genes, save_raw = FALSE, save_path = NULL) {
   batch_size = 1
 
   # Reading the protein coding genes file --------------------------------------
@@ -88,6 +88,14 @@ fetch_uniprot <- function(protein_coding_genes, input_genes) {
 
   # Combine all batch results into a single data frame
   uniprot_input_gene_symbol_results <- do.call(rbind, results)
+
+  # Save raw data
+  if (save_raw) {
+    if (is.null(save_path)) {
+      save_path <- "data/uniprot_input_gene_symbol_results.csv"
+    }
+    readr::write_csv(uniprot_input_gene_symbol_results, save_path)
+  }
 
   ## Clean results
   # Remove trailing ';' from the HGNC column

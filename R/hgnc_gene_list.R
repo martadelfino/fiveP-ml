@@ -4,7 +4,7 @@
 #'
 #' @return A dataframe with protein coding gene data from EBI database.
 #' @export
-fetch_hgnc_gene_list <- function() {
+fetch_hgnc_gene_list <- function(save_raw = FALSE, save_path = NULL) {
 
   # Fetch hgnc gene file
 
@@ -12,6 +12,14 @@ fetch_hgnc_gene_list <- function() {
   protein_coding_genes <- readr::read_delim("https://storage.googleapis.com/public-download-files/hgnc/tsv/tsv/locus_types/gene_with_protein_product.txt",
                                             delim = "\t",
                                             col_names = TRUE) %>% as.data.frame()
+
+  # Save raw data
+  if (save_raw) {
+    if (is.null(save_path)) {
+      save_path <- "data/hgnc_gene_list.csv"
+    }
+    readr::write_csv(protein_coding_genes, save_path)
+  }
 
   cat("\n(1/12) finished running hgnc_gene_list.R\n")
   return(protein_coding_genes)

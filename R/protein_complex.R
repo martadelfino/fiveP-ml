@@ -7,7 +7,7 @@
 #' @return A dataframe with Protein Complex data of the input genes from Complex Portal Database.
 #' @export
 fetch_protein_complex <- function(protein_coding_genes,
-                                  uniprot_input_gene_symbol_results_cleaned) {
+                                  uniprot_input_gene_symbol_results_cleaned, save_raw = FALSE, save_path = NULL) {
 
   # Creating a new df of the complexes from uniprot results --------------------
 
@@ -25,6 +25,13 @@ fetch_protein_complex <- function(protein_coding_genes,
 
   ComplexPortal <- read_delim('https://ftp.ebi.ac.uk/pub/databases/intact/complex/current/complextab/9606.tsv')
 
+  # Save raw data
+  if (save_raw) {
+    if (is.null(save_path)) {
+      save_path <- "data/ComplexPortal.csv"
+    }
+    readr::write_csv(ComplexPortal, save_path)
+  }
 
   ## Cleaning ComplexPortal file
   # Note: the ComplexPortal is updated every month, so the date will be important

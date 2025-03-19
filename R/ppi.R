@@ -6,7 +6,7 @@
 #' @return A dataframe with data from Database.
 #' @export
 
-fetch_ppi <- function(protein_coding_genes) {
+fetch_ppi <- function(protein_coding_genes, save_raw = FALSE, save_path = NULL) {
 
   # Reading the protein coding genes file --------------------------------------
 
@@ -20,6 +20,14 @@ fetch_ppi <- function(protein_coding_genes) {
   string_db <- STRINGdb::STRINGdb$new(version="12.0", species=9606,
                             score_threshold=700, network_type="full",
                             input_directory="")
+
+  # Save raw data
+  if (save_raw) {
+    if (is.null(save_path)) {
+      save_path <- "data/string_db.rds"
+    }
+    saveRDS(string_db, file = "string_db.rds")
+  }
 
   # Mapping input gene list to the STRING identifiers
   input_genes_mapped <- string_db$map(hgnc_ensembl, "ensembl_gene_id", removeUnmappedRows = TRUE )

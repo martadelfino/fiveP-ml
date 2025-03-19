@@ -5,7 +5,7 @@
 #' @param protein_coding_genes The df of all protein coding genes.
 #' @return A dataframe with paralogues data from Ensembl.
 #' @export
-fetch_paralogues <- function(protein_coding_genes, chunk_size = 100) {
+fetch_paralogues <- function(protein_coding_genes, chunk_size = 100, save_raw = FALSE, save_path = NULL) {
 
   # Select necessary columns
   hgnc_ensembl <- protein_coding_genes %>%
@@ -50,6 +50,14 @@ fetch_paralogues <- function(protein_coding_genes, chunk_size = 100) {
 
   # Combine results into a single dataframe
   paralogues <- do.call(rbind, paralogues_list)
+
+  # Save raw data
+  if (save_raw) {
+    if (is.null(save_path)) {
+      save_path <- "data/paralogues.csv"
+    }
+    readr::write_csv(paralogues, save_path)
+  }
 
   # Clean the results as before
   paralogues_cleaned <- paralogues %>%
