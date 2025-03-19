@@ -27,7 +27,7 @@ save_raw_files <- function(input_genes, save_path) {
   paralogues        <- fetch_paralogues(hgnc_gene_list, save_raw = save_raw, save_path = paralogues_file)
   pathways          <- fetch_pathways(hgnc_gene_list, input_genes, save_raw = save_raw, save_path = pathways_file)
   ppi               <- fetch_ppi(hgnc_gene_list, save_raw = save_raw, save_path = ppi_file)
-  uniprot           <- fetch_uniprot(hgnc_gene_list, input_genes, save_raw = save_raw, save_path = uniprot_file)
+  uniprot           <- fetch_uniprot(hgnc_gene_list, input_genes, save_raw = save_raw, save_path = uniprot_file) ###
   protein_complex   <- fetch_protein_complex(hgnc_gene_list, uniprot, save_raw = save_raw, save_path = protein_complex_file)
   protein_families  <- fetch_protein_families(hgnc_gene_list, uniprot, save_raw = save_raw, save_path = protein_families_file)
 
