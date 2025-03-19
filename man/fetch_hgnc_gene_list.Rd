@@ -4,7 +4,7 @@
 \alias{fetch_hgnc_gene_list}
 \title{Fetch all protein coding genes data}
 \usage{
-fetch_hgnc_gene_list()
+fetch_hgnc_gene_list(save_raw = FALSE, save_path = NULL)
 }
 \value{
 A dataframe with protein coding gene data from EBI database.

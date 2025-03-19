@@ -6,7 +6,9 @@
 \usage{
 fetch_protein_families(
   protein_coding_genes,
-  uniprot_input_gene_symbol_results_cleaned
+  uniprot_input_gene_symbol_results_cleaned,
+  save_raw = FALSE,
+  save_path = NULL
 )
 }
 \arguments{

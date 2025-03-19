@@ -4,7 +4,7 @@
 \alias{fetch_ppi}
 \title{Fetch PPI Data}
 \usage{
-fetch_ppi(protein_coding_genes)
+fetch_ppi(protein_coding_genes, save_raw = FALSE, save_path = NULL)
 }
 \arguments{
 \item{protein_coding_genes}{The df of all protein coding genes.}

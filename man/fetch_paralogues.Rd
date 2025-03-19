@@ -4,7 +4,12 @@
 \alias{fetch_paralogues}
 \title{Fetch Paralogues Data}
 \usage{
-fetch_paralogues(protein_coding_genes, chunk_size = 100)
+fetch_paralogues(
+  protein_coding_genes,
+  chunk_size = 100,
+  save_raw = FALSE,
+  save_path = NULL
+)
 }
 \arguments{
 \item{protein_coding_genes}{The df of all protein coding genes.}

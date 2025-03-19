@@ -4,7 +4,12 @@
 \alias{fetch_uniprot}
 \title{Fetch Uniprot Data}
 \usage{
-fetch_uniprot(protein_coding_genes, input_genes)
+fetch_uniprot(
+  protein_coding_genes,
+  input_genes,
+  save_raw = FALSE,
+  save_path = NULL
+)
 }
 \arguments{
 \item{protein_coding_genes}{The df of all protein coding genes.}
