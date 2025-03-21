@@ -34,3 +34,32 @@ save_raw_files <- function(input_genes, save_path) {
   cat("saved raw files")
   invisible(NULL)
 }
+
+
+#' saving raw files for each P - that use uniprot
+#'
+#' @param input_genes The df of input genes.
+#' @param save_path path to save the raw files.
+#' @return just a print statement.the files will be saved.
+#' @export
+save_raw_files_uniprot_only <- function(input_genes, save_path, name) {
+
+  save_raw = TRUE
+
+  # Ensure the directory exists; if not, create it
+  if (!dir.exists(save_path)) {
+    dir.create(save_path, recursive = TRUE)
+  }
+
+  # Define unique file names for each output
+  uniprot_file       <- file.path(save_path, paste0(name, "uniprot.csv"))
+  protein_families_file <- file.path(save_path, paste0(name, "protein_families.csv"))
+
+  # Data fetching functions with their respective file paths
+  hgnc_gene_list    <- fetch_hgnc_gene_list()
+  uniprot           <- fetch_uniprot(hgnc_gene_list, input_genes, save_raw = save_raw, save_path = uniprot_file) ###
+  protein_families  <- fetch_protein_families(hgnc_gene_list, uniprot, save_raw = save_raw, save_path = protein_families_file)
+
+  cat("saved raw files uniprot")
+  invisible(NULL)
+}
