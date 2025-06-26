@@ -1,9 +1,10 @@
 #' Main function for obtaining fiveP scores for the input genes
 #'
 #' @param input_genes A vector of gene HGNC IDs
+#' @param binary Logical, if TRUE the scores will be binary (0 or 1), if FALSE the scores will be the actual ratios
 #' @return A dataframe with the fiveP scores
 #' @export
-get_fiveP <- function(input_genes) { # eventually I can add options to save the intermediate files too
+get_fiveP <- function(input_genes, binary = TRUE) { # eventually I can add options to save the intermediate files too
 
   # Data fetching functions ----------------------------------------------------
   hgnc_gene_list <- fetch_hgnc_gene_list()
@@ -51,10 +52,10 @@ get_fiveP <- function(input_genes) { # eventually I can add options to save the 
     arrange(desc(protein_complex_score), desc(protein_family_score),
             desc(pathway_score), desc(paralogue_score), desc(ppi_score))
 
-  results <- results %>%
-    distinct() %>%
-    # Convert any score > 0 to 1, and anything else (0 or NA) to 0
-    dplyr::mutate(across(ends_with("_score"), ~ ifelse(. > 0, 1, 0)))
+  if (binary) {
+    results <- results %>%
+      dplyr::mutate(across(ends_with("_score"), ~ ifelse(. > 0, 1, 0)))
+  }
 
   cat("finished")
   return(results)

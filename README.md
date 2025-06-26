@@ -36,7 +36,7 @@ Load package
 
 `library(fivePml)`
 
-### Formula for each P 
+### Formula for each P
 
 Paralogue and PPI are scores are calculated differently than protein complex, protein family, and pathway scores.
 
@@ -54,6 +54,4 @@ Using PPI as the example: For all protein coding genes, a score is calculated by
 
 #### Final results
 
-The result is each protein coding gene is assigned a score from 0 to 1, for each 'P'. For the genes without data, a 'NA' is left in its place. The output is a data frame with HGNC IDs, and columns for each P.
-
-(Add back option to keep the ratios).
+The result is each protein coding gene is assigned a score from 0 to 1, for each 'P'. There is also the option to keep these as ratios. For the genes without data, a 'NA' is left in its place. The output is a data frame with HGNC IDs, and columns for each P.
