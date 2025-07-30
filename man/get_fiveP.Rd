@@ -4,10 +4,12 @@
 \alias{get_fiveP}
 \title{Main function for obtaining fiveP scores for the input genes}
 \usage{
-get_fiveP(input_genes)
+get_fiveP(input_genes, binary = TRUE)
 }
 \arguments{
 \item{input_genes}{A vector of gene HGNC IDs}
+
+\item{binary}{Logical, if TRUE the scores will be binary (0 or 1), if FALSE the scores will be the actual ratios}
 }
 \value{
 A dataframe with the fiveP scores

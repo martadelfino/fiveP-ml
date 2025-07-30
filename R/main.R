@@ -8,7 +8,7 @@ get_fiveP <- function(input_genes, binary = TRUE) { # eventually I can add optio
 
   # Data fetching functions ----------------------------------------------------
   hgnc_gene_list <- fetch_hgnc_gene_list()
-  paralogues <- fetch_paralogues(hgnc_gene_list)
+  paralogs <- fetch_paralogs(hgnc_gene_list)
   pathways <- fetch_pathways(hgnc_gene_list, input_genes)
   ppi <- fetch_ppi(hgnc_gene_list)
   uniprot <- fetch_uniprot(hgnc_gene_list, input_genes)
@@ -16,7 +16,7 @@ get_fiveP <- function(input_genes, binary = TRUE) { # eventually I can add optio
   protein_families <- fetch_protein_families(hgnc_gene_list, uniprot)
 
   # Data processing functions --------------------------------------------------
-  paralogues_ratio <- calculate_paralogues_ratio(paralogues, input_genes)
+  paralogs_ratio <- calculate_paralogs_ratio(paralogs, input_genes)
   pathways_ratio <- calculate_pathways_ratio(pathways$input_genes_Uniprot2Reactome,
                                              pathways$Uniprot2Reactome_final_hgnc_no_na,
                                              input_genes)
@@ -35,22 +35,22 @@ get_fiveP <- function(input_genes, binary = TRUE) { # eventually I can add optio
     dplyr::select(hgnc_id, ratio_input_genes_in_families)
   pathways <- pathways_ratio %>%
     dplyr::select(hgnc_id, ratio_input_genes_in_pathways)
-  paralogues <- paralogues_ratio %>%
+  paralogs <- paralogs_ratio %>%
     dplyr::select(hgnc_id, ratio_paraloginputgenes_to_paralogs)
   ppi <- ppi_ratio %>%
     dplyr::select(hgnc_id, ratio_interactioninputgenes_to_interactions)
 
   list_of_dfs <- list(protein_coding_genes, protein_complexes, protein_families,
-                      pathways, paralogues, ppi)
+                      pathways, paralogs, ppi)
 
   results <- reduce(list_of_dfs, left_join, by = "hgnc_id") %>%
     dplyr::rename(protein_complex_score = ratio_input_genes_in_complexes) %>%
     dplyr::rename(protein_family_score = ratio_input_genes_in_families) %>%
     dplyr::rename(pathway_score = ratio_input_genes_in_pathways) %>%
-    dplyr::rename(paralogue_score = ratio_paraloginputgenes_to_paralogs) %>%
+    dplyr::rename(paralog_score = ratio_paraloginputgenes_to_paralogs) %>%
     dplyr::rename(ppi_score = ratio_interactioninputgenes_to_interactions) %>%
     arrange(desc(protein_complex_score), desc(protein_family_score),
-            desc(pathway_score), desc(paralogue_score), desc(ppi_score))
+            desc(pathway_score), desc(paralog_score), desc(ppi_score))
 
   if (binary) {
     results <- results %>%
