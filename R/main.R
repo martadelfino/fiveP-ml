@@ -61,4 +61,3 @@ get_fiveP <- function(input_genes, binary = TRUE) { # eventually I can add optio
   return(results)
 }
 
-retrw <-
