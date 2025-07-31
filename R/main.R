@@ -43,7 +43,7 @@ get_fiveP <- function(input_genes, binary = TRUE) { # eventually I can add optio
   list_of_dfs <- list(protein_coding_genes, protein_complexes, protein_families,
                       pathways, paralogs, ppi)
 
-  results <- reduce(list_of_dfs, left_join, by = "hgnc_id") %>%
+  results <- list_of_dfs %>% reduce(left_join, by = "hgnc_id") %>%
     dplyr::rename(protein_complex_score = ratio_input_genes_in_complexes) %>%
     dplyr::rename(protein_family_score = ratio_input_genes_in_families) %>%
     dplyr::rename(pathway_score = ratio_input_genes_in_pathways) %>%
@@ -60,3 +60,5 @@ get_fiveP <- function(input_genes, binary = TRUE) { # eventually I can add optio
   cat("finished")
   return(results)
 }
+
+retrw <-
