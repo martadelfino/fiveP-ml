@@ -12,7 +12,7 @@ fetch_hgnc_gene_list <- function(save_raw = FALSE, save_path = NULL) {
   protein_coding_genes <- readr::read_delim("https://storage.googleapis.com/public-download-files/hgnc/tsv/tsv/locus_types/gene_with_protein_product.txt",
                                             delim = "\t",
                                             col_names = TRUE,
-                                            col_select = c(hgnc_id, uniprot_ids, symbol, ensembl_gene_id)) %>%
+                                            col_select = c(hgnc_id, uniprot_ids, symbol, ensembl_gene_id, entrez_id)) %>%
     as.data.frame()
 
   # Save raw data
