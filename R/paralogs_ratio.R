@@ -15,8 +15,8 @@ calculate_paralogs_ratio <- function(paralogs, input_genes) {
   # Remove anything below 30% paralogs - I've decided to take the mean -------
 
   paralogs_filtered <- paralogs %>%
-    filter(mean_paralog_perc >= 30) %>%
-    rename(hgnc_id = gene1_hgnc_id) %>%
+    dplyr::filter(mean_paralog_perc >= 30) %>%
+    dplyr::rename(hgnc_id = gene1_hgnc_id) %>%
     dplyr::select(hgnc_id, paralog_hgnc_id, mean_paralog_perc, max_paralog_perc)
 
 
@@ -29,12 +29,12 @@ calculate_paralogs_ratio <- function(paralogs, input_genes) {
 
   # Check if paralog is an input gene
   paralogs_filtered_count2 <- paralogs_filtered_count1 %>%
-    mutate(is_paralog_input_gene_yes_or_no = ifelse(paralog_hgnc_id %in% input_genes$hgnc_id, 1, 0))
+    dplyr::mutate(is_paralog_input_gene_yes_or_no = ifelse(paralog_hgnc_id %in% input_genes$hgnc_id, 1, 0))
 
   # Count how many paralogs are input genes
   paralogs_filtered_count3 <- paralogs_filtered_count2 %>%
     group_by(hgnc_id) %>%
-    mutate(num_input_gene_paralogs = sum(is_paralog_input_gene_yes_or_no))
+    dplyr::mutate(num_input_gene_paralogs = sum(is_paralog_input_gene_yes_or_no))
 
   # Ratio of number of paralogs that are input gene : number of paralogs
   paralogs_filtered_ratio <- paralogs_filtered_count3 %>%
