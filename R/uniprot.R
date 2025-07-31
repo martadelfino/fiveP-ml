@@ -107,9 +107,9 @@ fetch_uniprot <- function(protein_coding_genes, input_genes, save_raw = FALSE, s
   # Check if rows_to_separate is empty
   if (length(rows_to_separate) > 0) {
     uniprot_input_gene_symbol_results_separated <- uniprot_input_gene_symbol_results %>%
-      slice(rows_to_separate) %>%
-      separate_rows(HGNC, sep = ";") %>%
-      mutate(HGNC = ifelse(grepl("HGNC:", HGNC), HGNC, paste0("HGNC:", HGNC)))
+      dplyr::slice(rows_to_separate) %>%
+      tidyr::separate_rows(HGNC, sep = ";") %>%
+      dplyr::mutate(HGNC = ifelse(grepl("HGNC:", HGNC), HGNC, paste0("HGNC:", HGNC)))
     #cat('print(uniprot_input_gene_symbol_results_separated)')
     #print(uniprot_input_gene_symbol_results_separated)
 
