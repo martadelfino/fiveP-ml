@@ -98,7 +98,7 @@ fetch_uniprot <- function(protein_coding_genes, input_genes, save_raw = FALSE, s
     if (is.null(save_path)) {
       save_path <- "data/uniprot_input_gene_symbol_results.csv"
     }
-    readr::write_csv(uniprot_input_gene_symbol_results, save_path)
+    write.csv(uniprot_input_gene_symbol_results, save_path, row.names = FALSE)
   }
 
   ## Clean results

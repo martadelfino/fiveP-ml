@@ -71,7 +71,7 @@ fetch_protein_families <- function(protein_coding_genes,
     }
 
     # Convert the TSV content into a data frame by reading from a string
-    batch_data <- read_tsv(I(tsv_content), col_types = cols(.default = "c"), show_col_types = FALSE)
+    batch_data <- read_tsv(I(tsv_content), col_types = cols(.default = "c"), show_col_types = FALSE)########################## this is readr
 
     # Append the batch data to the results list
     results[[i]] <- batch_data
@@ -85,7 +85,7 @@ fetch_protein_families <- function(protein_coding_genes,
     if (is.null(save_path)) {
       save_path <- "data/uniprot_input_gene_family_results.csv"
     }
-    readr::write_csv(uniprot_input_gene_family_results, save_path)
+    write.csv(uniprot_input_gene_family_results, save_path, row.names = FALSE)
   }
 
   # Cleaning Protein Families result file from Uniprot ---------------------------

@@ -11,7 +11,8 @@ fetch_hgnc_gene_list <- function(save_raw = FALSE, save_path = NULL) {
   protein_coding_genes <- data.table::fread("https://storage.googleapis.com/public-download-files/hgnc/tsv/tsv/locus_types/gene_with_protein_product.txt",
     sep = "\t",
     select = c("hgnc_id", "uniprot_ids", "symbol", "ensembl_gene_id",
-               "entrez_id")
+               "entrez_id"),
+    nThread = 1
   ) %>%
     as.data.frame()
 

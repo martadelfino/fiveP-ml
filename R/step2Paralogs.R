@@ -65,7 +65,7 @@ fetch_paralogs <- function(protein_coding_genes, chunk_size = 100, save_raw = FA
     if (is.null(save_path)) {
       save_path <- "data/paralogs.csv"
     }
-    readr::write_csv(paralogs, save_path)
+    write.csv(paralogs, save_path, row.names = FALSE)
   }
 
   # Clean the results as before

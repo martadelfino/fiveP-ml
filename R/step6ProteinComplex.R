@@ -27,14 +27,16 @@ fetch_protein_complex <- function(protein_coding_genes,
 
   # Querying ComplexPortal -----------------------------------------------------
 
-  ComplexPortal <- read_delim("https://ftp.ebi.ac.uk/pub/databases/intact/complex/current/complextab/9606.tsv")
+  ComplexPortal <- data.table::fread("https://ftp.ebi.ac.uk/pub/databases/intact/complex/current/complextab/9606.tsv",
+                                     sep = "\t",
+                                     nThread = 1)
 
   # Save raw data
   if (save_raw) {
     if (is.null(save_path)) {
       save_path <- "data/ComplexPortal.csv"
     }
-    readr::write_csv(ComplexPortal, save_path)
+    write.csv(ComplexPortal, save_path, row.names = FALSE)
   }
 
   ## Cleaning ComplexPortal file

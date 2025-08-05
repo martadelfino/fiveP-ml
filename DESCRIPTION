@@ -18,6 +18,7 @@ Imports:
     purrr,
     tidyr,
     magrittr,
+    data.table,
     readr,
     STRINGdb,
     biomaRt
