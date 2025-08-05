@@ -10,13 +10,17 @@ The similarities are calculated with the following equations, where the higher t
 
 Using pathways as the example P: For each protein coding gene, the number of unique input genes in input gene pathways, divided by the number of unique genes in input gene pathways.
 
-$r(g)=\frac{|S\cap P(S)|}{P(S)}$
+$$
+r(g)=\frac{|S\cap P(S)|}{P(S)}
+$$
 
 #### Paralogs, PPI
 
 Using PPI as the example: For each protein coding gene, the number of input genes that gene interacts with, divided by the number of genes it interacts with:
 
-$r(g)=\frac{|P(g)\cap S|}{|P(g)|}$
+$$
+r(g)=\frac{|P(g)\cap S|}{|P(g)|}
+$$
 
 #### Usage
 
