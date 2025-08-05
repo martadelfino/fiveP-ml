@@ -2,10 +2,10 @@
 #'
 #' @param paralogs A df of paralog annotations for all protein coding genes
 #' @param input_genes A vector of input genes
+#' @importFrom magrittr %>%
 #' @return A dataframe with HGNC IDs and paralog score
 #' @export
 calculate_paralogs_ratio <- function(paralogs, input_genes) {
-
   # Input gene list ------------------------------------------------------------
 
   input_genes <- input_genes %>%
@@ -42,14 +42,16 @@ calculate_paralogs_ratio <- function(paralogs, input_genes) {
     dplyr::mutate(ratio_paraloginputgenes_to_paralogs = num_input_gene_paralogs / num_of_paralogs)
 
   paralogs_filtered_final <- paralogs_filtered_ratio %>%
-    dplyr::select(!paralog_hgnc_id) %>%  dplyr::select(!mean_paralog_perc) %>%
+    dplyr::select(!paralog_hgnc_id) %>%
+    dplyr::select(!mean_paralog_perc) %>%
     dplyr::select(!max_paralog_perc) %>%
     dplyr::distinct(hgnc_id, .keep_all = TRUE) %>%
     dplyr::select(!is_paralog_input_gene_yes_or_no) %>%
     dplyr::mutate(ratio_paraloginputgenes_to_paralogs = ifelse(is.na(ratio_paraloginputgenes_to_paralogs),
-                                                               0, ratio_paraloginputgenes_to_paralogs))
+      0, ratio_paraloginputgenes_to_paralogs
+    ))
 
 
-  cat('\n(8/12) finished running paralogs_ratio.R\n')
+  cat("\n(8/12) finished running paralogs_ratio.R\n")
   return(paralogs_filtered_final)
 }

@@ -2,19 +2,23 @@
 #'
 #' This function fetches protein family data from Uniprot for the input genes.
 #'
+#' @param save_raw Boolean for choosing whether to save the raw data or not.
+#' @param save_path String for the path to save the raw data.
 #' @param protein_coding_genes The df of all protein coding genes.
 #' @param uniprot_input_gene_symbol_results_cleaned The df of uniprot results of input genes.
+#' @importFrom magrittr %>%
 #' @return A dataframe with Protein Family data from Uniprot for the input genes.
 #' @export
 fetch_protein_families <- function(protein_coding_genes,
                                    uniprot_input_gene_symbol_results_cleaned, save_raw = FALSE, save_path = NULL) {
-
   # Creating a df of protein families data from uniprot results ----------------
 
   input_genes_protein_families_expanded <- uniprot_input_gene_symbol_results_cleaned %>%
-    tidyr::separate_rows(PANTHER, sep = ";") %>% distinct() %>%
+    tidyr::separate_rows(PANTHER, sep = ";") %>%
+    distinct() %>%
     filter(PANTHER != "") %>%
-    dplyr::select(PANTHER) %>% distinct() %>%
+    dplyr::select(PANTHER) %>%
+    distinct() %>%
     dplyr::rename(family_id = PANTHER)
 
   # removing extra information after the ':'
@@ -23,11 +27,11 @@ fetch_protein_families <- function(protein_coding_genes,
 
   # Querying Uniprot -----------------------------------------------------------
 
-  batch_size = 1
+  batch_size <- 1
 
   # Obtain families
   family <- dplyr::select(input_genes_protein_families_expanded, family_id)
-  vector_family <- family %>% dplyr::pull(family_id)   # turning object into vector
+  vector_family <- family %>% dplyr::pull(family_id) # turning object into vector
 
   # Ensure input is a character vector
   if (!is.character(vector_family)) {
@@ -88,11 +92,11 @@ fetch_protein_families <- function(protein_coding_genes,
 
   # Selecting and renaming required columns
   proteinfamily_genes <- uniprot_input_gene_family_results %>%
-    dplyr::select(Entry, HGNC, 'Gene Names (primary)', PANTHER) %>%
+    dplyr::select(Entry, HGNC, "Gene Names (primary)", PANTHER) %>%
     dplyr::rename(uniprot_ids = Entry) %>%
     dplyr::rename(hgnc_id = HGNC) %>%
     dplyr::rename(family_id = PANTHER) %>%
-    dplyr::rename(symbol = 'Gene Names (primary)')
+    dplyr::rename(symbol = "Gene Names (primary)")
 
   # Removing trailing ;
   proteinfamily_genes$hgnc_id <- gsub(";$", "", proteinfamily_genes$hgnc_id)
@@ -105,13 +109,12 @@ fetch_protein_families <- function(protein_coding_genes,
 
   # removing extra bits
   proteinfamily_genes_expanded$family_id <- trimws(sub(":.*", "", proteinfamily_genes_expanded$family_id))
-  proteinfamily_genes_expanded <- proteinfamily_genes_expanded %>% distinct() %>%
+  proteinfamily_genes_expanded <- proteinfamily_genes_expanded %>%
+    distinct() %>%
     dplyr::select(family_id, uniprot_ids, hgnc_id, symbol) %>% # fixing order of columns
     arrange(family_id) # rearranging rows
 
 
-  cat('\n(7/12) finished running protein_families.R\n')
+  cat("\n(7/12) finished running protein_families.R\n")
   return(proteinfamily_genes_expanded)
-
 }
-

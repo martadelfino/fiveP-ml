@@ -2,12 +2,15 @@
 #'
 #' This function fetches protein data from Uniprot for all protein coding genes_______?.
 #'
+#' @param save_raw Boolean for choosing whether to save the raw data or not.
+#' @param save_path String for the path to save the raw data.
 #' @param protein_coding_genes The df of all protein coding genes.
 #' @param input_genes The df of input genes.
+#' @importFrom magrittr %>%
 #' @return A dataframe with Uniprot data of the input genes.
 #' @export
 fetch_uniprot <- function(protein_coding_genes, input_genes, save_raw = FALSE, save_path = NULL) {
-  batch_size = 1
+  batch_size <- 1
 
   # Reading the protein coding genes file --------------------------------------
   hgnc_uniprot_symbol <- protein_coding_genes %>%
@@ -17,7 +20,7 @@ fetch_uniprot <- function(protein_coding_genes, input_genes, save_raw = FALSE, s
   # Checks of the protein coding genes file ------------------------------------
 
   # Removing all extra proteins identifiers (only keeping the canonical ones)
-  hgnc_uniprot_symbol$uniprot_ids <- trimws(sub('\\|.*', "", hgnc_uniprot_symbol$uniprot_ids))
+  hgnc_uniprot_symbol$uniprot_ids <- trimws(sub("\\|.*", "", hgnc_uniprot_symbol$uniprot_ids))
 
 
   # Reading the input gene list --------------------------------------------------
@@ -27,9 +30,10 @@ fetch_uniprot <- function(protein_coding_genes, input_genes, save_raw = FALSE, s
 
   # Get gene symbols for the input genes
   input_genes_symbols <- input_genes %>% left_join(hgnc_uniprot_symbol,
-                                                   by = 'hgnc_id')
+    by = "hgnc_id"
+  )
 
-  #print(input_genes_symbols)
+  # print(input_genes_symbols)
   # Access uniprot ---------------------------------------------------------------
 
   # Note: Uniprot has no specific update schedule. So the entry version will be
@@ -37,8 +41,8 @@ fetch_uniprot <- function(protein_coding_genes, input_genes, save_raw = FALSE, s
 
   # Obtain gene symbols
   symbol <- dplyr::select(input_genes_symbols, `symbol`)
-  #print(symbol)
-  vector_symbol <- symbol %>% dplyr::pull(`symbol`)  # turn object into vector
+  # print(symbol)
+  vector_symbol <- symbol %>% dplyr::pull(`symbol`) # turn object into vector
 
 
 
@@ -99,24 +103,29 @@ fetch_uniprot <- function(protein_coding_genes, input_genes, save_raw = FALSE, s
 
   ## Clean results
   # Remove trailing ';' from the HGNC column
-  uniprot_input_gene_symbol_results$HGNC <- gsub(";$", "",
-                                                 uniprot_input_gene_symbol_results$HGNC)
+  uniprot_input_gene_symbol_results$HGNC <- gsub(
+    ";$", "",
+    uniprot_input_gene_symbol_results$HGNC
+  )
   # Expand any rows with multiple HGNCs
-  rows_to_separate <- which(sapply(strsplit(uniprot_input_gene_symbol_results$HGNC, ";"),
-                                   function(x) sum(grepl("HGNC:", x)) > 1))
+  rows_to_separate <- which(sapply(
+    strsplit(uniprot_input_gene_symbol_results$HGNC, ";"),
+    function(x) sum(grepl("HGNC:", x)) > 1
+  ))
   # Check if rows_to_separate is empty
   if (length(rows_to_separate) > 0) {
     uniprot_input_gene_symbol_results_separated <- uniprot_input_gene_symbol_results %>%
       dplyr::slice(rows_to_separate) %>%
       tidyr::separate_rows(HGNC, sep = ";") %>%
       dplyr::mutate(HGNC = ifelse(grepl("HGNC:", HGNC), HGNC, paste0("HGNC:", HGNC)))
-    #cat('print(uniprot_input_gene_symbol_results_separated)')
-    #print(uniprot_input_gene_symbol_results_separated)
+    # cat('print(uniprot_input_gene_symbol_results_separated)')
+    # print(uniprot_input_gene_symbol_results_separated)
 
     # Combine the separated rows with the rest of the dataframe
-    uniprot_input_gene_symbol_results_combined <- bind_rows(uniprot_input_gene_symbol_results[-rows_to_separate, ],
-                                                            uniprot_input_gene_symbol_results_separated)
-
+    uniprot_input_gene_symbol_results_combined <- bind_rows(
+      uniprot_input_gene_symbol_results[-rows_to_separate, ],
+      uniprot_input_gene_symbol_results_separated
+    )
   } else { # continue
     uniprot_input_gene_symbol_results_combined <- uniprot_input_gene_symbol_results
   }
@@ -133,18 +142,20 @@ fetch_uniprot <- function(protein_coding_genes, input_genes, save_raw = FALSE, s
 
   # Renaming columns
   uniprot_input_gene_symbol_results_cleaned <- uniprot_input_gene_symbol_results_combined %>%
-    dplyr::rename(hgnc_id = HGNC) %>% dplyr::rename(uniprot_ids = Entry) %>%
-    dplyr::rename(symbol = 'Gene Names (primary)')
+    dplyr::rename(hgnc_id = HGNC) %>%
+    dplyr::rename(uniprot_ids = Entry) %>%
+    dplyr::rename(symbol = "Gene Names (primary)")
 
   merged_df <- merge(uniprot_input_gene_symbol_results_cleaned,
-                     input_genes_symbols, by = c("hgnc_id", "uniprot_ids"))
+    input_genes_symbols,
+    by = c("hgnc_id", "uniprot_ids")
+  )
 
   # removing extra columns after the merge
   uniprot_input_gene_symbol_results_cleaned <- merged_df %>%
     dplyr::select(hgnc_id, uniprot_ids, symbol.x, ComplexPortal, PANTHER, `Entry version`) %>%
     dplyr::rename(symbol = symbol.x)
 
-  cat('\n(5/12) finished running uniprot.R\n')
+  cat("\n(5/12) finished running uniprot.R\n")
   return(uniprot_input_gene_symbol_results_cleaned)
-
 }

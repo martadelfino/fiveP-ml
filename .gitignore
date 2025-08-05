@@ -8,3 +8,5 @@ renv/staging/
 tests/testthat/*.log
 tests/testthat/*.out
 tests/testthat/*.db
+linting.Rmd
+.lintr.R

@@ -31,20 +31,20 @@ Install devtools
 Install dependencies
 
 ```{r}
-if (!requireNamespace("tidyverse", quietly = TRUE))
-install.packages("tidyverse")
+#if (!requireNamespace("tidyverse", quietly = TRUE))
+#install.packages("tidyverse")
 
-if (!requireNamespace("devtools", quietly = TRUE))
-install.packages("devtools")
+#if (!requireNamespace("devtools", quietly = TRUE))
+#install.packages("devtools")
 
-if (!requireNamespace("BiocManager", quietly = TRUE))
-install.packages("BiocManager")
+#if (!requireNamespace("BiocManager", quietly = TRUE))
+#install.packages("BiocManager")
 
-if (!requireNamespace("STRINGdb", quietly = TRUE)) {
-BiocManager::install("STRINGdb") }
+#if (!requireNamespace("STRINGdb", quietly = TRUE)) {
+#BiocManager::install("STRINGdb") }
 
-if (!requireNamespace("biomaRt", quietly = TRUE)) {
-BiocManager::install("biomaRt") }
+#if (!requireNamespace("biomaRt", quietly = TRUE)) {
+#BiocManager::install("biomaRt") }
 
 ```
 
@@ -71,3 +71,7 @@ head(result)
 
 
 ```
+
+### Other comments
+
+License is GPL (\>= 3) because for PPI, we use STRINGdb, which has GLP 2 license.

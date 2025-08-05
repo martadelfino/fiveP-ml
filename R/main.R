@@ -2,6 +2,7 @@
 #'
 #' @param input_genes A vector of gene HGNC IDs
 #' @param binary Logical, if TRUE the scores will be binary (0 or 1), if FALSE the scores will be the actual ratios
+#' @importFrom magrittr %>%
 #' @return A dataframe with the fiveP scores
 #' @export
 get_fiveP <- function(input_genes, binary = TRUE) { # eventually I can add options to save the intermediate files too
@@ -17,9 +18,11 @@ get_fiveP <- function(input_genes, binary = TRUE) { # eventually I can add optio
 
   # Data processing functions --------------------------------------------------
   paralogs_ratio <- calculate_paralogs_ratio(paralogs, input_genes)
-  pathways_ratio <- calculate_pathways_ratio(pathways$input_genes_Uniprot2Reactome,
-                                             pathways$Uniprot2Reactome_final_hgnc_no_na,
-                                             input_genes)
+  pathways_ratio <- calculate_pathways_ratio(
+    pathways$input_genes_Uniprot2Reactome,
+    pathways$Uniprot2Reactome_final_hgnc_no_na,
+    input_genes
+  )
   ppi_ratio <- calculate_ppi_ratio(ppi, input_genes)
   protein_complex_ratio <- calculate_protein_complex_ratio(protein_complex, input_genes)
   protein_families_ratio <- calculate_protein_families_ratio(protein_families, input_genes)
@@ -40,17 +43,22 @@ get_fiveP <- function(input_genes, binary = TRUE) { # eventually I can add optio
   ppi <- ppi_ratio %>%
     dplyr::select(hgnc_id, ratio_interactioninputgenes_to_interactions)
 
-  list_of_dfs <- list(protein_coding_genes, protein_complexes, protein_families,
-                      pathways, paralogs, ppi)
+  list_of_dfs <- list(
+    protein_coding_genes, protein_complexes, protein_families,
+    pathways, paralogs, ppi
+  )
 
-  results <- list_of_dfs %>% purrr::reduce(left_join, by = "hgnc_id") %>%
+  results <- list_of_dfs %>%
+    purrr::reduce(left_join, by = "hgnc_id") %>%
     dplyr::rename(protein_complex_score = ratio_input_genes_in_complexes) %>%
     dplyr::rename(protein_family_score = ratio_input_genes_in_families) %>%
     dplyr::rename(pathway_score = ratio_input_genes_in_pathways) %>%
     dplyr::rename(paralog_score = ratio_paraloginputgenes_to_paralogs) %>%
     dplyr::rename(ppi_score = ratio_interactioninputgenes_to_interactions) %>%
-    arrange(desc(protein_complex_score), desc(protein_family_score),
-            desc(pathway_score), desc(paralog_score), desc(ppi_score))
+    arrange(
+      desc(protein_complex_score), desc(protein_family_score),
+      desc(pathway_score), desc(paralog_score), desc(ppi_score)
+    )
 
   if (binary) {
     results <- results %>%
@@ -60,4 +68,3 @@ get_fiveP <- function(input_genes, binary = TRUE) { # eventually I can add optio
   cat("finished")
   return(results)
 }
-

@@ -3,9 +3,9 @@
 #!/bin/sh
 
 # Ensure Rscript is available and BiocManager is installed
-Rscript -e "if (!requireNamespace('BiocManager', quietly=TRUE)) install.packages('BiocManager')"
-
 # Check and install dependencies
-Rscript -e "if (!requireNamespace('tidyverse', quietly=TRUE)) install.packages('tidyverse')"
-Rscript -e "if (!requireNamespace('STRINGdb', quietly=TRUE)) BiocManager::install('STRINGdb')"
-Rscript -e "if (!requireNamespace('biomaRt', quietly=TRUE)) BiocManager::install('biomaRt')"
+
+"${R_HOME}/bin/Rscript" -e "if (!requireNamespace('BiocManager', quietly=TRUE)) install.packages('BiocManager')"
+"${R_HOME}/bin/Rscript" -e "if (!requireNamespace('tidyverse', quietly=TRUE)) install.packages('tidyverse')"
+"${R_HOME}/bin/Rscript" -e "if (!requireNamespace('STRINGdb', quietly=TRUE)) BiocManager::install('STRINGdb')"
+"${R_HOME}/bin/Rscript" -e "if (!requireNamespace('biomaRt', quietly=TRUE)) BiocManager::install('biomaRt')"

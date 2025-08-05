@@ -3,10 +3,10 @@
 #' @param input_genes_pathways A df of pathway annotations based on input genes
 #' @param Uniprot2Reactome A df of pathway annotations of all protein coding genes
 #' @param input_genes A df of input genes
+#' @importFrom magrittr %>%
 #' @return A dataframe with HGNC IDs and pathway score
 #' @export
 calculate_pathways_ratio <- function(input_genes_pathways, Uniprot2Reactome, input_genes) {
-
   # Input genes  ---------------------------------------------------------------
 
   input_genes <- input_genes %>%
@@ -27,8 +27,10 @@ calculate_pathways_ratio <- function(input_genes_pathways, Uniprot2Reactome, inp
   # Counting the number of input genes per pathway
   reactome_counts <- reactome_counts %>%
     group_by(pathway_id) %>%
-    mutate(num_genes_in_pathway = n(),
-           numb_input_gene_per_pathway = sum(input_gene_yes_or_no))
+    mutate(
+      num_genes_in_pathway = n(),
+      numb_input_gene_per_pathway = sum(input_gene_yes_or_no)
+    )
 
 
   # Creating a df for the number of unique genes in each pathway -----------------
@@ -42,18 +44,25 @@ calculate_pathways_ratio <- function(input_genes_pathways, Uniprot2Reactome, inp
       num_input_genes_in_pathways = sum(unique(reactome_counts$hgnc_id[reactome_counts$pathway_id %in% pathway_id]) %in% input_genes$hgnc_id) - (hgnc_id %in% input_genes$hgnc_id)
     ) %>%
     dplyr::mutate(ratio_input_genes_in_pathways = num_input_genes_in_pathways / num_unique_genes_in_pathways) %>%
-    dplyr::select(hgnc_id, uniprot_ids, pathway_id, num_pathways,
-                  num_unique_genes_in_pathways, num_input_genes_in_pathways,
-                  ratio_input_genes_in_pathways) %>% arrange(hgnc_id)
+    dplyr::select(
+      hgnc_id, uniprot_ids, pathway_id, num_pathways,
+      num_unique_genes_in_pathways, num_input_genes_in_pathways,
+      ratio_input_genes_in_pathways
+    ) %>%
+    arrange(hgnc_id)
 
   reactome_counts_per_gene_final <- reactome_counts_per_gene %>%
-    dplyr::select(hgnc_id, uniprot_ids, num_pathways,
-                  num_unique_genes_in_pathways, num_input_genes_in_pathways,
-                  ratio_input_genes_in_pathways) %>% unique() %>%
+    dplyr::select(
+      hgnc_id, uniprot_ids, num_pathways,
+      num_unique_genes_in_pathways, num_input_genes_in_pathways,
+      ratio_input_genes_in_pathways
+    ) %>%
+    unique() %>%
     dplyr::mutate(ratio_input_genes_in_pathways = ifelse(is.na(ratio_input_genes_in_pathways),
-                                                         0, ratio_input_genes_in_pathways))
+      0, ratio_input_genes_in_pathways
+    ))
 
 
-  cat('\n(9/12) finished running pathways_ratio.R\n')
+  cat("\n(9/12) finished running pathways_ratio.R\n")
   return(reactome_counts_per_gene_final)
 }

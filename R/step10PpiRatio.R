@@ -2,10 +2,10 @@
 #'
 #' @param ppi A df of ppi annotations for all protein coding genes
 #' @param input_genes A df of input genes
+#' @importFrom magrittr %>%
 #' @return A dataframe with HGNC IDs and PPI scores
 #' @export
 calculate_ppi_ratio <- function(ppi, input_genes) {
-
   # PPI annotations ------------------------------------------------------------
 
   ppi <- ppi %>%
@@ -46,10 +46,10 @@ calculate_ppi_ratio <- function(ppi, input_genes) {
     dplyr::distinct(hgnc_id, .keep_all = TRUE) %>%
     dplyr::select(!is_interaction_input_gene_yes_or_no) %>%
     dplyr::mutate(ratio_interactioninputgenes_to_interactions = ifelse(is.na(ratio_interactioninputgenes_to_interactions),
-                                                                       0, ratio_interactioninputgenes_to_interactions))
+      0, ratio_interactioninputgenes_to_interactions
+    ))
 
 
-  cat('\n(10/12) finished running ppi_ratio.R\n')
+  cat("\n(10/12) finished running ppi_ratio.R\n")
   return(ppi_ratio_final)
 }
-

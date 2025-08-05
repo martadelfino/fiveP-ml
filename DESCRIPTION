@@ -1,19 +1,24 @@
 Package: fivePml
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Calculating similarity ratios of five protein features 
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Author: Marta Delfino
+Maintainer: Marta Delfino <martadelfino23@gmail.com>
+Description: The fiveP package takes input/seed genes and calculates similarity 
+    ratios of five protein features (protein complex, protein family, pathways, 
+    PPI, and paralogs). It calculates similarity ratios for all protein coding 
+    genes based on the input/seed genes. 
+License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Imports:
-    tidyverse,
-    BiocManager,
+    dplyr,
+    purrr,
+    tidyr,
+    magrittr,
+    readr,
     STRINGdb,
     biomaRt
 Suggests: 
