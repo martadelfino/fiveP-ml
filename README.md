@@ -11,7 +11,7 @@ The similarities are calculated with the following equations, where the higher t
 Using pathways as the example P: For each protein coding gene, the number of unique input genes in input gene pathways, divided by the number of unique genes in input gene pathways.
 
 $$
-r(g)=\frac{|S\cap P(S)|}{P(S)}
+r(g)=\frac{|S\cap P(S)|}{|P(S)|}
 $$
 
 #### Paralogs, PPI
@@ -40,7 +40,7 @@ For the genes without data, a 'NA' is left in its place.
 
 -   dplyr (2.5.0)
 
--   purr (1.0.2)
+-   purrr (1.0.2)
 
 -   tidyr (1.3.1)
 
@@ -74,10 +74,22 @@ input_genes <- tibble(hgnc_id = c("HGNC:19743",
                                   "HGNC:6936",
                                   "HGNC:4878"))
 
-result <- get_fiveP(input_genes, binary = TRUE) # this will give you scores of 0 or 1.
+result <- get_fiveP(input_genes, binary = FALSE) # binary = FALSE will give scores of 0 or 1.
 head(result)
-
-
+#>      hgnc_id protein_complex_score protein_family_score pathway_score
+#> 1 HGNC:19743                     1                    1    0.02702703
+#> 2  HGNC:9202                     1                    1    0.02702703
+#> 3  HGNC:4879                     1                    1    0.01449275
+#> 4  HGNC:8654                     1                   NA    0.15384615
+#> 5  HGNC:6937                     1                   NA    0.06896552
+#> 6  HGNC:8653                     0                    1    0.07692308
+#>   paralog_score  ppi_score
+#> 1           1.0 0.04545455
+#> 2           1.0 0.00000000
+#> 3           1.0 0.05263158
+#> 4           0.0 0.00000000
+#> 5           0.0 0.06250000
+#> 6           0.5 0.00000000
 ```
 
 2.  Running the workflow steps manually
