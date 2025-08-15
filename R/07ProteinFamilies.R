@@ -75,11 +75,7 @@ fetch_protein_families <- function(protein_coding_genes,
       stringsAsFactors = FALSE, # keep as characters, not factors
       colClasses = "character"  # force all columns to character
     )
-    # Check if the batch_data has the expected columns
-    expected_columns <- c("Entry", "HGNC", "Gene Names (primary)", "PANTHER")
-    # print actual columns
-    actual_columns <- colnames(batch_data)
-    print(paste("Batch", i, "columns:", paste(actual_columns, collapse = ", ")))
+
     # Append the batch data to the results list
     results[[i]] <- batch_data
   }
@@ -98,11 +94,11 @@ fetch_protein_families <- function(protein_coding_genes,
   # Cleaning Protein Families result file from Uniprot ---------------------------
   # Selecting and renaming required columns
   proteinfamily_genes <- uniprot_input_gene_family_results %>%
-    dplyr::select(Entry, HGNC, "Gene Names (primary)", PANTHER) %>%
+    dplyr::select(Entry, HGNC, "Gene.Names..primary.", PANTHER) %>%
     dplyr::rename(uniprot_ids = Entry) %>%
     dplyr::rename(hgnc_id = HGNC) %>%
     dplyr::rename(family_id = PANTHER) %>%
-    dplyr::rename(symbol = "Gene Names (primary)")
+    dplyr::rename(symbol = "Gene.Names..primary.")
 
   # Removing trailing ;
   proteinfamily_genes$hgnc_id <- gsub(";$", "", proteinfamily_genes$hgnc_id)
