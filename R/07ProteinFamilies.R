@@ -79,6 +79,7 @@ fetch_protein_families <- function(protein_coding_genes,
     expected_columns <- c("Entry", "HGNC", "Gene Names (primary)", "PANTHER")
     # print actual columns
     actual_columns <- colnames(batch_data)
+    print(paste("Batch", i, "columns:", paste(actual_columns, collapse = ", ")))
     # Append the batch data to the results list
     results[[i]] <- batch_data
   }
