@@ -68,10 +68,12 @@ fetch_protein_families <- function(protein_coding_genes,
     }
 
     # Convert the TSV content into a data frame by reading from a string
-    batch_data <- read.delim(
-      text = tsv_content,
-      stringsAsFactors = FALSE,
-      colClasses = "character"
+    batch_data <- read.table(
+      text = tsv_content,     # read directly from string
+      sep = "\t",             # tab separated
+      header = TRUE,          # first row is header
+      stringsAsFactors = FALSE, # keep as characters, not factors
+      colClasses = "character"  # force all columns to character
     )
 
     # Append the batch data to the results list
