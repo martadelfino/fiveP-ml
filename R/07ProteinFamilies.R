@@ -75,7 +75,10 @@ fetch_protein_families <- function(protein_coding_genes,
       stringsAsFactors = FALSE, # keep as characters, not factors
       colClasses = "character"  # force all columns to character
     )
-
+    # Check if the batch_data has the expected columns
+    expected_columns <- c("Entry", "HGNC", "Gene Names (primary)", "PANTHER")
+    # print actual columns
+    actual_columns <- colnames(batch_data)
     # Append the batch data to the results list
     results[[i]] <- batch_data
   }
