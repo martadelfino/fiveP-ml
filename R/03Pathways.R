@@ -11,30 +11,23 @@
 #' @export
 fetch_pathways <- function(protein_coding_genes, input_genes, save_raw = FALSE, save_path = NULL) {
   # Reading the protein coding genes file --------------------------------------
-
   hgnc_uniprot_symbol_entrez <- protein_coding_genes %>%
     dplyr::select(hgnc_id, uniprot_ids, symbol, entrez_id)
 
   # Removing all extra proteins identifiers (only keeping the canonical ones)
   hgnc_uniprot_symbol_entrez$uniprot_ids <- trimws(sub("\\|.*", "", hgnc_uniprot_symbol_entrez$uniprot_ids))
 
-
   # Reading the input gene list ------------------------------------------------
-
   input_genes <- input_genes %>%
     dplyr::select(hgnc_id)
 
-
   # Get gene symbols for the input genes ---------------------------------------
-
   input_genes_entrez_id <- input_genes %>%
     inner_join(hgnc_uniprot_symbol_entrez, by = "hgnc_id") %>%
     pull(entrez_id) %>%
     as.character(.)
 
-
   # Retrieving the genes in all pathways ---------------------------------------
-
   # Obtaining data from Reactome directly, lowest level pathways
   Uniprot2Reactome <- read_delim("https://reactome.org/download/current/UniProt2Reactome.txt",
     col_names = FALSE
@@ -71,7 +64,6 @@ fetch_pathways <- function(protein_coding_genes, input_genes, save_raw = FALSE, 
   # Filter the Uniprot2Reactome final file with the input genes
   input_genes_Uniprot2Reactome <- Uniprot2Reactome_final_hgnc_no_na %>%
     dplyr::filter(hgnc_id %in% input_genes$hgnc_id)
-
 
   cat("\n(3/12) finished running pathways.R\n")
   return(list(

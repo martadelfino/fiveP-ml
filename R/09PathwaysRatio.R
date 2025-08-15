@@ -8,18 +8,14 @@
 #' @export
 calculate_pathways_ratio <- function(input_genes_pathways, Uniprot2Reactome, input_genes) {
   # Input genes  ---------------------------------------------------------------
-
   input_genes <- input_genes %>%
     dplyr::select(hgnc_id)
 
   # Filtering Uniprot2Reactome by selecting the pathways from input genes pathways -----
-
   input_genes_Uniprot2Reactome <- Uniprot2Reactome %>%
     dplyr::filter(pathway_id %in% input_genes_pathways$pathway_id)
 
-
   # Counting the number of input genes per pathway -------------------------------
-
   # Checking if the individual genes are input genes or not
   reactome_counts <- input_genes_Uniprot2Reactome %>%
     mutate(input_gene_yes_or_no = ifelse(hgnc_id %in% input_genes$hgnc_id, 1, 0))
@@ -32,9 +28,7 @@ calculate_pathways_ratio <- function(input_genes_pathways, Uniprot2Reactome, inp
       numb_input_gene_per_pathway = sum(input_gene_yes_or_no)
     )
 
-
   # Creating a df for the number of unique genes in each pathway -----------------
-
   # Counting the number of unique genes in each pathway that gene is related to
   reactome_counts_per_gene <- reactome_counts %>%
     group_by(hgnc_id) %>%
@@ -61,7 +55,6 @@ calculate_pathways_ratio <- function(input_genes_pathways, Uniprot2Reactome, inp
     dplyr::mutate(ratio_input_genes_in_pathways = ifelse(is.na(ratio_input_genes_in_pathways),
       0, ratio_input_genes_in_pathways
     ))
-
 
   cat("\n(9/12) finished running pathways_ratio.R\n")
   return(reactome_counts_per_gene_final)

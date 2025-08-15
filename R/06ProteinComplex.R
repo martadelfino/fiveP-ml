@@ -12,7 +12,6 @@
 fetch_protein_complex <- function(protein_coding_genes,
                                   uniprot_input_gene_symbol_results_cleaned, save_raw = FALSE, save_path = NULL) {
   # Creating a new df of the complexes from uniprot results --------------------
-
   input_genes_protein_complexes_expanded <- uniprot_input_gene_symbol_results_cleaned %>%
     tidyr::separate_rows(ComplexPortal, sep = ";") %>%
     distinct() %>%
@@ -23,7 +22,6 @@ fetch_protein_complex <- function(protein_coding_genes,
 
   # removing extra bits
   input_genes_protein_complexes_expanded$complex_id <- trimws(sub("\\[.*?\\]", "", input_genes_protein_complexes_expanded$complex_id))
-
 
   # Querying ComplexPortal -----------------------------------------------------
 
@@ -62,9 +60,7 @@ fetch_protein_complex <- function(protein_coding_genes,
   # Removing rows without a uniprot_id (these would've been other things like molecules)
   ComplexPortal_participants_separated <- subset(ComplexPortal_participants_separated, uniprot_ids != "")
 
-
   # Only keeping the complexes identified in the input gene lists --------------
-
   # Joining the input genes protein complexes with the participants for each complex
   input_genes_complexportal_participants <- input_genes_protein_complexes_expanded %>%
     left_join(ComplexPortal_participants_separated,
@@ -73,7 +69,6 @@ fetch_protein_complex <- function(protein_coding_genes,
     )
 
   # Adding hgnc_id
-
   hgnc_uniprot_symbol <- protein_coding_genes %>%
     dplyr::select(hgnc_id, uniprot_ids, symbol)
 
@@ -86,9 +81,7 @@ fetch_protein_complex <- function(protein_coding_genes,
     ) %>%
     unique()
 
-
   # rows_with_na <- input_genes_complexportal_participants_hgnc[!complete.cases(input_genes_complexportal_participants_hgnc), ]
-  # print(rows_with_na). could I use the checker Pilar made?
 
   cat("\n(6/12) finished running protein_complex.R\n")
   return(input_genes_complexportal_participants_hgnc)

@@ -12,7 +12,6 @@
 fetch_protein_families <- function(protein_coding_genes,
                                    uniprot_input_gene_symbol_results_cleaned, save_raw = FALSE, save_path = NULL) {
   # Creating a df of protein families data from uniprot results ----------------
-
   input_genes_protein_families_expanded <- uniprot_input_gene_symbol_results_cleaned %>%
     tidyr::separate_rows(PANTHER, sep = ";") %>%
     distinct() %>%
@@ -24,9 +23,7 @@ fetch_protein_families <- function(protein_coding_genes,
   # removing extra information after the ':'
   input_genes_protein_families_expanded$family_id <- trimws(sub(":.*", "", input_genes_protein_families_expanded$family_id))
 
-
   # Querying Uniprot -----------------------------------------------------------
-
   batch_size <- 1
 
   # Obtain families
@@ -71,7 +68,11 @@ fetch_protein_families <- function(protein_coding_genes,
     }
 
     # Convert the TSV content into a data frame by reading from a string
-    batch_data <- read_tsv(I(tsv_content), col_types = cols(.default = "c"), show_col_types = FALSE)########################## this is readr
+    batch_data <- read.delim(
+      text = tsv_content,
+      stringsAsFactors = FALSE,
+      colClasses = "character"
+    )
 
     # Append the batch data to the results list
     results[[i]] <- batch_data
@@ -89,7 +90,6 @@ fetch_protein_families <- function(protein_coding_genes,
   }
 
   # Cleaning Protein Families result file from Uniprot ---------------------------
-
   # Selecting and renaming required columns
   proteinfamily_genes <- uniprot_input_gene_family_results %>%
     dplyr::select(Entry, HGNC, "Gene Names (primary)", PANTHER) %>%
@@ -113,7 +113,6 @@ fetch_protein_families <- function(protein_coding_genes,
     distinct() %>%
     dplyr::select(family_id, uniprot_ids, hgnc_id, symbol) %>% # fixing order of columns
     arrange(family_id) # rearranging rows
-
 
   cat("\n(7/12) finished running protein_families.R\n")
   return(proteinfamily_genes_expanded)

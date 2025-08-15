@@ -7,21 +7,16 @@
 #' @export
 calculate_ppi_ratio <- function(ppi, input_genes) {
   # PPI annotations ------------------------------------------------------------
-
   ppi <- ppi %>%
     dplyr::select(!protein1_string_id) %>%
     dplyr::select(!protein2_string_id) %>%
     dplyr::rename(hgnc_id = protein1_hgnc_id)
 
-
   # Input genes ----------------------------------------------------------------
-
   input_genes <- input_genes %>%
     dplyr::select(hgnc_id)
 
-
   # Calculations ---------------------------------------------------------------
-
   # Counting the number of interactions per gene
   ppi_count1 <- ppi %>%
     group_by(hgnc_id) %>%
@@ -48,7 +43,6 @@ calculate_ppi_ratio <- function(ppi, input_genes) {
     dplyr::mutate(ratio_interactioninputgenes_to_interactions = ifelse(is.na(ratio_interactioninputgenes_to_interactions),
       0, ratio_interactioninputgenes_to_interactions
     ))
-
 
   cat("\n(10/12) finished running ppi_ratio.R\n")
   return(ppi_ratio_final)

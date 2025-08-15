@@ -7,13 +7,10 @@
 #' @export
 calculate_paralogs_ratio <- function(paralogs, input_genes) {
   # Input gene list ------------------------------------------------------------
-
   input_genes <- input_genes %>%
     dplyr::select(hgnc_id)
 
-
   # Remove anything below 30% paralogs - I've decided to take the mean -------
-
   paralogs_filtered <- paralogs %>%
     dplyr::filter(mean_paralog_perc >= 30) %>%
     dplyr::rename(hgnc_id = gene1_hgnc_id) %>%
@@ -21,7 +18,6 @@ calculate_paralogs_ratio <- function(paralogs, input_genes) {
 
 
   # Calculations ---------------------------------------------------------------
-
   # Counting the number of paralogs per gene
   paralogs_filtered_count1 <- paralogs_filtered %>%
     group_by(hgnc_id) %>%
@@ -50,7 +46,6 @@ calculate_paralogs_ratio <- function(paralogs, input_genes) {
     dplyr::mutate(ratio_paraloginputgenes_to_paralogs = ifelse(is.na(ratio_paraloginputgenes_to_paralogs),
       0, ratio_paraloginputgenes_to_paralogs
     ))
-
 
   cat("\n(8/12) finished running paralogs_ratio.R\n")
   return(paralogs_filtered_final)

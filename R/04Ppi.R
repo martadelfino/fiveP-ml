@@ -13,14 +13,11 @@
 
 fetch_ppi <- function(protein_coding_genes, save_raw = FALSE, save_path = NULL) {
   # Reading the protein coding genes file --------------------------------------
-
   hgnc_esembl <- protein_coding_genes %>%
     dplyr::select(hgnc_id, ensembl_gene_id)
   hgnc_ensembl <- data.frame(hgnc_esembl)
 
-
   # Load STRING database -------------------------------------------------------
-
   string_db <- STRINGdb::STRINGdb$new(
     version = "12.0", species = 9606,
     score_threshold = 700, network_type = "full",
@@ -47,7 +44,6 @@ fetch_ppi <- function(protein_coding_genes, save_raw = FALSE, save_path = NULL) 
     dplyr::distinct()
 
   # Clean the data -------------------------------------------------------------
-
   # Map back to HGNC IDs
   interactions_cleaned <- input_genes_mapped %>%
     left_join(interactions, join_by(STRING_id == from),

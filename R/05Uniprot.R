@@ -11,20 +11,15 @@
 #' @export
 fetch_uniprot <- function(protein_coding_genes, input_genes, save_raw = FALSE, save_path = NULL) {
   batch_size <- 1
-
   # Reading the protein coding genes file --------------------------------------
   hgnc_uniprot_symbol <- protein_coding_genes %>%
     dplyr::select(hgnc_id, uniprot_ids, symbol)
 
-
   # Checks of the protein coding genes file ------------------------------------
-
   # Removing all extra proteins identifiers (only keeping the canonical ones)
   hgnc_uniprot_symbol$uniprot_ids <- trimws(sub("\\|.*", "", hgnc_uniprot_symbol$uniprot_ids))
 
-
   # Reading the input gene list --------------------------------------------------
-
   input_genes <- input_genes %>%
     dplyr::select(hgnc_id)
 
@@ -33,18 +28,13 @@ fetch_uniprot <- function(protein_coding_genes, input_genes, save_raw = FALSE, s
     by = "hgnc_id"
   )
 
-  # print(input_genes_symbols)
   # Access uniprot ---------------------------------------------------------------
 
   # Note: Uniprot has no specific update schedule. So the entry version will be
   # important to keep track of database/entry versions.
-
   # Obtain gene symbols
   symbol <- dplyr::select(input_genes_symbols, `symbol`)
-  # print(symbol)
   vector_symbol <- symbol %>% dplyr::pull(`symbol`) # turn object into vector
-
-
 
   # Ensure input is a character vector
   if (!is.character(vector_symbol)) {
@@ -118,15 +108,13 @@ fetch_uniprot <- function(protein_coding_genes, input_genes, save_raw = FALSE, s
       dplyr::slice(rows_to_separate) %>%
       tidyr::separate_rows(HGNC, sep = ";") %>%
       dplyr::mutate(HGNC = ifelse(grepl("HGNC:", HGNC), HGNC, paste0("HGNC:", HGNC)))
-    # cat('print(uniprot_input_gene_symbol_results_separated)')
-    # print(uniprot_input_gene_symbol_results_separated)
 
     # Combine the separated rows with the rest of the dataframe
     uniprot_input_gene_symbol_results_combined <- bind_rows(
       uniprot_input_gene_symbol_results[-rows_to_separate, ],
       uniprot_input_gene_symbol_results_separated
     )
-  } else { # continue
+  } else {
     uniprot_input_gene_symbol_results_combined <- uniprot_input_gene_symbol_results
   }
 

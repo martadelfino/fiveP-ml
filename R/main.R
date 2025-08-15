@@ -5,8 +5,7 @@
 #' @importFrom magrittr %>%
 #' @return A dataframe with the fiveP scores
 #' @export
-get_fiveP <- function(input_genes, binary = TRUE) { # eventually I can add options to save the intermediate files too
-
+get_fiveP <- function(input_genes, binary = TRUE) {
   # Data fetching functions ----------------------------------------------------
   hgnc_gene_list <- fetch_hgnc_gene_list()
   paralogs <- fetch_paralogs(hgnc_gene_list)

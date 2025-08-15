@@ -7,19 +7,14 @@
 #' @export
 calculate_protein_complex_ratio <- function(complexportal, input_genes) {
   # Input genes ----------------------------------------------------------------
-
   input_genes <- input_genes %>%
     dplyr::select(hgnc_id)
 
-
   # ComplexPortal protein complexes of input genes -----------------------------
-
   complexportal_counts <- complexportal %>%
     mutate(input_gene_yes_or_no = ifelse(hgnc_id %in% input_genes$hgnc_id, 1, 0))
 
-
   # Calculations ---------------------------------------------------------------
-
   # Counting the number of input genes per complex
   complexportal_counts <- complexportal_counts %>%
     group_by(complex_id) %>%
@@ -53,7 +48,6 @@ calculate_protein_complex_ratio <- function(complexportal, input_genes) {
     dplyr::mutate(ratio_input_genes_in_complexes = ifelse(is.na(ratio_input_genes_in_complexes),
       0, ratio_input_genes_in_complexes
     ))
-
 
   cat("\n(11/12) finished running protein_complex_ratio.R\n")
   return(complexportal_counts_per_gene_final)

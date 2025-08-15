@@ -24,7 +24,7 @@ $$
 
 #### Usage
 
-The package can be used with one function, get_fiveP(), or with individual functions for each step of the workflow. Examples are below.
+The package can be used with one function, `get_fiveP()`, or with individual functions for each step of the workflow. Examples are below.
 
 The output is always for all protein coding genes. Depending on how the package is used, the user can get ratios for all fivePs or for whatever Ps they select.
 
