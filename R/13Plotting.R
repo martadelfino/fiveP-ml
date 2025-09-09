@@ -24,8 +24,7 @@ fivep_distribution_plot <- function(dis_plots, bins = 20) {
     theme_minimal() +
     coord_cartesian(ylim = c(0, 11000)) +
     labs(
-      title = "Count Distribution of Columns Across DataFrames",
-      x = "Value",
+      x = "P threshold",
       y = "Count"
     )
 }

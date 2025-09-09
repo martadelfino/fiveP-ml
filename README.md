@@ -171,9 +171,13 @@ results_binary <- results %>%
 4.  Plotting fiveP distributions
 
 ```{r}
-# Example: df1, df2, df3 each have an "id" column + 5 numeric columns
-#dis_plots <- list(ndd_ad_fivep = ndd_ad_fivep_raw, cvd_all_fivep = cvd_all_fivep_raw, random_pcg_fivep = random_pcg_fivep_raw)
+# Example: ndd_ad_fivep has an "id" column + 5 numeric columns. You can add as many fiveP result dfs as you'd like in the list. 
+dis_plots <- list(ndd_ad_fivep = ndd_ad_fivep)
 
+inputgene_fivep_dist_plot <- fivep_distribution_plot(dis_plots, bins = 20)
+inputgene_fivep_dist_plot_zoomedin <- fivep_distribution_plot_zoomedin(dis_plots, bins = 20)
+inputgene_fivep_dist_plot 
+inputgene_fivep_dist_plot_zoomedin
 ```
 
 5.  Wilcoxon Signed Rank Statistical test - comparing input gene list fiveP to 100 random gene list fivePs (GO term enrichment, GO term similarity, Wilcoxon Signed Rank test).
