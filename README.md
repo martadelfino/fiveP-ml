@@ -202,6 +202,14 @@ In order to ensure your input gene list fiveP results are significant, you can c
 Example of GO Similarity with ONE random gene list only:
 
 ```{r}
+library(tidyverse)
+library(biomaRt)
+library(fivePml)
+library(STRINGdb)
+library(clusterProfiler)
+library(org.Hs.eg.db)
+library(GOSemSim)
+
 # Step 1 --------------------------------------------------------------------------
 ## You've created the random gene list, you obtained fiveP for the random gene list and for 
 ## the input gene list. 
