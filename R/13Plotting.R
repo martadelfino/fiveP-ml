@@ -83,64 +83,81 @@ fivep_distribution_plot_zoomedin <- function(dis_plots, bins = 20, ymax = 2000) 
     )
 }
 
-#' Function for plotting GO term similarity of input gene list vs random gene lists
+#' Function for plotting GO term similarity of input gene list vs one random gene lists
 #'
-#' @param list1 A numeric vector of GO similarity scores for the input gene list
-#' @param list2 A numeric vector of GO similarity scores for a random gene list
-#' @param thresholds A numeric vector of threshold values (default is seq(0, 1, 0.05))
-#' @param sd_col The name of the column containing standard deviation values (as a string)
-#' @param sd_series The name of the series to which the standard deviation applies (as a string)
+#' @param df A data frame of GO similarity results with columns: threshold_label, input_list, random_list
 #' @param title Optional title for the plot
 #' @importFrom magrittr %>%
 #' @return A ggplot2 plot of GO term similarity results
 #' @export
-plot_go_similarity <- function(list1, list2, thresholds = seq(0, 1, 0.05),
-                               sd_col = NULL, sd_series = NULL, title = NULL) {
-  # Create a tidy data frame
-  df <- tibble(
-    threshold_label = sprintf("%.2f", thresholds),
-    Series1 = list1,
-    Series2 = list2
-  )
-
-  # If sd_col is provided, add it to df
-  if (!is.null(sd_col)) {
-    df[[sd_col]] <- sd_col  # if sd_col is numeric values, it will be added
-  }
-
-  # Convert thresholds to numeric
-  df <- df %>%
-    mutate(threshold = readr::parse_number(threshold_label))
-
-  # Pivot longer for plotting
+plot_go_similarity_1v1 <- function(df, title = NULL) {
   df_long <- df %>%
+    dplyr::mutate(threshold = as.numeric(threshold_label))%>%
     pivot_longer(
-      cols = -c(threshold, threshold_label, if (!is.null(sd_col)) all_of(sd_col)),
+      cols = -c(threshold, threshold_label),
       names_to = "series",
       values_to = "value"
     )
 
-  # Base plot
-  p <- ggplot(df_long, aes(x = threshold, y = value, color = series, group = series)) +
+  ggplot(df_long, aes(
+    x = threshold,
+    y = value,
+    color = series,
+    group = series
+  )) +
     geom_line(size = 1) +
-    geom_point()
-
-  # Error bars only if sd_col exists and sd_series is single
-  if (!is.null(sd_col) && !is.null(sd_series) && length(sd_series) == 1) {
-    sd_col_sym <- sym(sd_col)
-    p <- p +
-      geom_errorbar(
-        data = df_long %>% filter(series == sd_series),
-        aes(ymin = value - !!sd_col_sym, ymax = value + !!sd_col_sym),
-        width = 0.02,
-        color = "black"
-      )
-  }
-
-  p +
+    geom_point() +
     scale_x_continuous(breaks = c(0, 0.25, 0.5, 0.75, 1)) +
     coord_cartesian(ylim = c(0.1, 1)) +
     theme_minimal() +
     theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-    labs(title = title, x = "Threshold", y = "Value")
+    labs(
+      title = title,
+      x = "Threshold",
+      y = "Value"
+    )
+}
+
+#' Function for plotting GO term similarity of input gene list vs many random gene lists
+#'
+#' @param df A data frame of GO similarity results with columns: threshold_label, input_list, random_list, random_list_sd
+#' @param name_of_sd_series Name of the series in the df for which to plot error bars
+#' @param title Optional title for the plot
+#' @importFrom magrittr %>%
+#' @return A ggplot2 plot of GO term similarity results
+#' @export
+plot_go_similarity_1vmany <- function(df, name_of_sd_series = "", title = NULL) {
+  df_long <- df %>%
+    dplyr::mutate(threshold = readr::parse_number(threshold_label)) %>%
+    pivot_longer(
+      cols = -c(threshold, threshold_label, series1_sd),
+      names_to = "series",
+      values_to = "value"
+    )
+
+  ggplot(df_long, aes(
+    x = threshold,
+    y = value,
+    color = series,
+    group = series
+  )) +
+    geom_line(size = 1) +
+    geom_point() +
+    # Add error bars for series1
+    geom_errorbar(
+      data = df_long %>% filter(series == name_of_sd_series),
+      aes(ymin = value - df$series1_sd,
+          ymax = value + df$series1_sd),
+      width = 0.02,
+      color = "black"
+    ) +
+    scale_x_continuous(breaks = c(0, 0.25, 0.5, 0.75, 1)) +
+    coord_cartesian(ylim = c(0.1, 1)) +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+    labs(
+      title = title,
+      x = "Threshold",
+      y = "Value"
+    )
 }
