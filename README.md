@@ -62,9 +62,9 @@ For the genes without data, a 'NA' is left in its place.
 
 #### Examples
 
-1.  The get_fiveP() function
+1.  The `get_fiveP()` function
 
-The get_fiveP() function is the easiest way to get a df with all five Ps. (Please note: if you get a connection error at any point, restart the session and try again. This may be due to one of the packages or file locations.)
+The `get_fiveP()` function is the easiest way to get a df with all five Ps. (Please note: if you get a connection error at any point, restart the session and try again. This may be due to one of the packages or file locations.)
 
 ```{r}
 
