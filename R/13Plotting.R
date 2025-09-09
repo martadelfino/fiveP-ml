@@ -85,7 +85,9 @@ fivep_distribution_plot_zoomedin <- function(dis_plots, bins = 20, ymax = 2000) 
 
 #' Function for plotting GO term similarity of input gene list vs random gene lists
 #'
-#' @param df A dataframe of GO similarity results to plot
+#' @param list1 A numeric vector of GO similarity scores for the input gene list
+#' @param list2 A numeric vector of GO similarity scores for a random gene list
+#' @param thresholds A numeric vector of threshold values (default is seq(0, 1, 0.05))
 #' @param sd_col The name of the column containing standard deviation values (as a string)
 #' @param sd_series The name of the series to which the standard deviation applies (as a string)
 #' @param title Optional title for the plot

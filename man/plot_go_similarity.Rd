@@ -4,10 +4,21 @@
 \alias{plot_go_similarity}
 \title{Function for plotting GO term similarity of input gene list vs random gene lists}
 \usage{
-plot_go_similarity(df, sd_col = NULL, sd_series = NULL, title = NULL)
+plot_go_similarity(
+  list1,
+  list2,
+  thresholds = seq(0, 1, 0.05),
+  sd_col = NULL,
+  sd_series = NULL,
+  title = NULL
+)
 }
 \arguments{
-\item{df}{A dataframe of GO similarity results to plot}
+\item{list1}{A numeric vector of GO similarity scores for the input gene list}
+
+\item{list2}{A numeric vector of GO similarity scores for a random gene list}
+
+\item{thresholds}{A numeric vector of threshold values (default is seq(0, 1, 0.05))}
 
 \item{sd_col}{The name of the column containing standard deviation values (as a string)}
 
