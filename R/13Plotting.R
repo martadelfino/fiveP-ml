@@ -92,36 +92,44 @@ fivep_distribution_plot_zoomedin <- function(dis_plots, bins = 20, ymax = 2000) 
 #' @importFrom magrittr %>%
 #' @return A ggplot2 plot of GO term similarity results
 #' @export
-plot_go_similarity <- function(df, sd_col = NULL, sd_series = NULL, title = NULL) {
-  # If sd_col is provided, convert to symbol
-  sd_col_sym <- if (!is.null(sd_col)) sym(sd_col) else NULL
+plot_go_similarity <- function(list1, list2, thresholds = seq(0, 1, 0.05),
+                               sd_col = NULL, sd_series = NULL, title = NULL) {
+  # Create a tidy data frame
+  df <- tibble(
+    threshold_label = sprintf("%.2f", thresholds),
+    Series1 = list1,
+    Series2 = list2
+  )
 
+  # If sd_col is provided, add it to df
+  if (!is.null(sd_col)) {
+    df[[sd_col]] <- sd_col  # if sd_col is numeric values, it will be added
+  }
+
+  # Convert thresholds to numeric
+  df <- df %>%
+    mutate(threshold = readr::parse_number(threshold_label))
+
+  # Pivot longer for plotting
   df_long <- df %>%
-    dplyr::mutate(threshold = readr::parse_number(threshold_label)) %>%
     pivot_longer(
-      cols = -c(threshold, threshold_label, if (!is.null(sd_col)) !!sd_col_sym),
+      cols = -c(threshold, threshold_label, if (!is.null(sd_col)) all_of(sd_col)),
       names_to = "series",
       values_to = "value"
     )
 
-  p <- ggplot(df_long, aes(
-    x = threshold,
-    y = value,
-    color = series,
-    group = series
-  )) +
+  # Base plot
+  p <- ggplot(df_long, aes(x = threshold, y = value, color = series, group = series)) +
     geom_line(size = 1) +
     geom_point()
 
-  # Add error bars only if sd_col is provided and sd_series is a single value
+  # Error bars only if sd_col exists and sd_series is single
   if (!is.null(sd_col) && !is.null(sd_series) && length(sd_series) == 1) {
+    sd_col_sym <- sym(sd_col)
     p <- p +
       geom_errorbar(
         data = df_long %>% filter(series == sd_series),
-        aes(
-          ymin = value - !!sd_col_sym,
-          ymax = value + !!sd_col_sym
-        ),
+        aes(ymin = value - !!sd_col_sym, ymax = value + !!sd_col_sym),
         width = 0.02,
         color = "black"
       )
@@ -132,9 +140,5 @@ plot_go_similarity <- function(df, sd_col = NULL, sd_series = NULL, title = NULL
     coord_cartesian(ylim = c(0.1, 1)) +
     theme_minimal() +
     theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-    labs(
-      title = title,
-      x = "Threshold",
-      y = "Value"
-    )
+    labs(title = title, x = "Threshold", y = "Value")
 }
