@@ -92,35 +92,42 @@ fivep_distribution_plot_zoomedin <- function(dis_plots, bins = 20, ymax = 2000) 
 #' @importFrom magrittr %>%
 #' @return A ggplot2 plot of GO term similarity results
 #' @export
-plot_go_similarity <- function(df, sd_col, sd_series, title = NULL) {
-  sd_col_sym <- sym(sd_col)
+plot_go_similarity <- function(df, sd_col = NULL, sd_series = NULL, title = NULL) {
+  # If sd_col is provided, convert to symbol
+  sd_col_sym <- if (!is.null(sd_col)) sym(sd_col) else NULL
 
   df_long <- df %>%
     dplyr::mutate(threshold = readr::parse_number(threshold_label)) %>%
     pivot_longer(
-      cols = -c(threshold, threshold_label, !!sd_col_sym),
+      cols = -c(threshold, threshold_label, if (!is.null(sd_col)) !!sd_col_sym),
       names_to = "series",
       values_to = "value"
     )
 
-  ggplot(df_long, aes(
+  p <- ggplot(df_long, aes(
     x = threshold,
     y = value,
     color = series,
     group = series
   )) +
     geom_line(size = 1) +
-    geom_point() +
-    # Add error bars for the selected series
-    geom_errorbar(
-      data = df_long %>% filter(series == sd_series),
-      aes(
-        ymin = value - !!sd_col_sym,
-        ymax = value + !!sd_col_sym
-      ),
-      width = 0.02,
-      color = "black"
-    ) +
+    geom_point()
+
+  # Add error bars only if sd_col is provided and sd_series is a single value
+  if (!is.null(sd_col) && !is.null(sd_series) && length(sd_series) == 1) {
+    p <- p +
+      geom_errorbar(
+        data = df_long %>% filter(series == sd_series),
+        aes(
+          ymin = value - !!sd_col_sym,
+          ymax = value + !!sd_col_sym
+        ),
+        width = 0.02,
+        color = "black"
+      )
+  }
+
+  p +
     scale_x_continuous(breaks = c(0, 0.25, 0.5, 0.75, 1)) +
     coord_cartesian(ylim = c(0.1, 1)) +
     theme_minimal() +

@@ -180,7 +180,26 @@ inputgene_fivep_dist_plot
 inputgene_fivep_dist_plot_zoomedin
 ```
 
+fiveP distribution plot:
+
+![](images/clipboard-2943709743.png)
+
+fiveP distribution plot zoomed in:
+
+![](images/clipboard-3228800657.png)
+
+(Please note: you will get a warning such as: *Warning: [38;5;250mRemoved 58955 rows containing non-finite outside the scale range (`stat_bin()`).[39m.* This is because the results will have NAs in each column.)
+
 5.  Wilcoxon Signed Rank Statistical test - comparing input gene list fiveP to 100 random gene list fivePs (GO term enrichment, GO term similarity, Wilcoxon Signed Rank test).
+
+In order to ensure your input gene list fiveP results are significant, you can calculate the GO term similarity of your input gene list, versus the input gene list fiveP and random gene lists fiveP results. This means, once you have the fiveP for your input gene list, you can do the following steps:
+
+1.  Creating random gene lists, and get fiveP for each.
+2.  Calculate GO term enrichment for your input gene list, input gene list fiveP, and random gene list fivePs, at various fiveP thresholds.
+3.  Calculate GO term similarity between: input gene list enriched GO terms & input gene list fiveP enriched GO terms, input gene list enriched GO terms & random gene list enriched GO terms. You can do this at various fiveP thresholds.
+4.  Calculate Wilcoxon Signed Rank Test for the GO similarity scores obtained at step 3.
+
+Example for comparing just: input gene list enriched GO terms & input gene list fiveP enriched GO terms, input gene list enriched GO terms & ONE random gene list enriched GO terms.
 
 ```{r}
 

@@ -4,7 +4,7 @@
 \alias{plot_go_similarity}
 \title{Function for plotting GO term similarity of input gene list vs random gene lists}
 \usage{
-plot_go_similarity(df, sd_col, sd_series, title = NULL)
+plot_go_similarity(df, sd_col = NULL, sd_series = NULL, title = NULL)
 }
 \arguments{
 \item{df}{A dataframe of GO similarity results to plot}
