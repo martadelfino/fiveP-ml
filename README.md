@@ -168,6 +168,22 @@ results_binary <- results %>%
 
 ```
 
+4.  Plotting fiveP distributions
+
+```{r}
+# Example: df1, df2, df3 each have an "id" column + 5 numeric columns
+#dis_plots <- list(ndd_ad_fivep = ndd_ad_fivep_raw, cvd_all_fivep = cvd_all_fivep_raw, random_pcg_fivep = random_pcg_fivep_raw)
+
+```
+
+5.  Wilcoxon Signed Rank Statistical test - comparing input gene list fiveP to 100 random gene list fivePs (GO term enrichment, GO term similarity, Wilcoxon Signed Rank test).
+
+```{r}
+
+
+
+```
+
 ### Other comments
 
 License is GPL (\>= 3) because for PPI, we use STRINGdb, which has GLP 2 license.
