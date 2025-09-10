@@ -1,4 +1,4 @@
-# fiveP-ml
+# fiveP
 
 fiveP is a package created to identify protein coding genes similar to a user-defined set of input or seed genes, based on four protein annotations and paralog status. The five 'Ps' are: protein complex, protein family, pathways, protein-protein interactions (PPI), and paralog.
 
@@ -54,11 +54,11 @@ For the genes without data, a 'NA' is left in its place.
 
 #### Install package
 
-`devtools::install_github("martadelfino/fiveP-ml")`
+`devtools::install_github("martadelfino/fiveP")`
 
 #### Load package
 
-`library(fivePml)`
+`library(fiveP)`
 
 #### Examples
 
