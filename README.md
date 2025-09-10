@@ -230,7 +230,7 @@ random_gene_list_fivep # get_fiveP() output
 
 # defining the fiveP thresholds 
 filter_positive_thresholds <- function(df) {
-  thresholds <- seq(0, 1, by = 0.05)
+  thresholds <- round(seq(0, 1, by = 0.05), 2)
   
   lapply(thresholds, function(th) {
     if (th == 0) {
@@ -341,7 +341,7 @@ ndd_ad_fivep_random_fivep_gosim_plot <- plot_go_similarity_1v1(df)
 
 Example of input gene list & one random gene list:
 
-![](images/clipboard-1465269990.png)
+![](images/clipboard-5182418.png)
 
 If you wanted to calculate the Wilcoxon Signed Rank test, you would need to create multiple random gene lists and do this process for each random gene list. Then, you could use the `plot_go_similarity_1vmany()` plotting function. Example of input gene list & many random gene lists:
 
