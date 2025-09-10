@@ -1,4 +1,4 @@
-Package: fivePml
+Package: fiveP
 Type: Package
 Title: Calculating similarity ratios of five protein features 
 Version: 0.1.0

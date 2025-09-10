@@ -202,7 +202,7 @@ Example of input gene list & many random gene lists:
 
 (all 0s are removed to calculate mean and sd from random gene list fivep line)
 
-With multiple random gene lists, the Wilcoxon Signed Rank test can be used to evaluate the statistical significance of your input gene list fiveP results, compared to random gene lists fiveP results.
+With multiple random gene lists, the Wilcoxon Signed Rank test can be used to evaluate the statistical significance of your input gene list fiveP results, compared to random gene lists fiveP results. The `run_wilcox_tests()` function is provided for easily running the test on multiple random gene lists.
 
 Example of Wilcoxon Signed Rank Test:
 
