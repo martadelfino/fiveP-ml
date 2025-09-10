@@ -1,4 +1,4 @@
-# fiveP - a tool for prioritizing genes with 5 biological features. 
+# fiveP - a tool for prioritizing genes with 5 biological features.
 
 fiveP is a package created to identify protein coding genes similar to a user-defined set of input or seed genes, based on four protein annotations and paralog status. The five 'Ps' are: protein complex, protein family, pathways, protein-protein interactions (PPI), and paralog.
 
